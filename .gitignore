@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Visual Studio Code
+*.code-workspace
+
+# Vue
+beyond-campus/node_modules/
+beyond-campus/public
+beyond-campus/dist
+
+# Log Files
+beyond-campus/npm-debug.log*
