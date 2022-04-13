@@ -65,7 +65,10 @@ export default {
   },
   methods: {
     search() {
-      this.$router.push({name: "PropertySearchResultsView", params: {school: this.school, propertyType: this.propertyType}});
+      this.$router.push({
+        name: "PropertySearchResultsView",
+        params: { school: this.school, propertyType: this.propertyType },
+      });
     },
   },
 };
