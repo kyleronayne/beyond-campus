@@ -4,7 +4,13 @@
       <a class="navbar__link">Rent</a>
       <a class="navbar__link">List A Property</a>
     </div>
-    <h1 class="navbar__title">BEYOND CAMPUS</h1>
+    <h1 class="navbar__title">
+      <router-link
+        class="title__router-link"
+        v-bind:to="{ path: '/', name: 'LandingView', component: LandingView }"
+        >Beyond Campus</router-link
+      >
+    </h1>
     <div class="navbar__right-links">
       <a class="navbar__link">Saved Properties</a>
       <a class="navbar__link profile-link">
@@ -45,7 +51,11 @@ export default class Navbar extends Vue {}
   text-align: center;
   font-size: 48px;
   font-weight: var(--theme-font-weight-bold);
+}
+
+.title__router-link {
   color: white;
+  text-decoration: none;
 }
 
 .navbar__right-links {
