@@ -1,17 +1,18 @@
 <template>
   <div>
-    <Navbar></Navbar>
+    <NavBar></NavBar>
     <FilterBar v-bind:propertyType="propertyType"></FilterBar>
   </div>
 </template>
 
 <script lang="ts">
-import Navbar from "../components/Navbar.vue";
+import { defineComponent } from "vue";
+import NavBar from "../components/NavBar.vue";
 import FilterBar from "../components/FilterBar.vue";
 import { useRoute } from "vue-router";
 
-export default {
-  components: { Navbar, FilterBar },
+export default defineComponent({
+  components: { NavBar, FilterBar },
   data() {
     return {
       school: "",
@@ -20,10 +21,10 @@ export default {
   },
   mounted() {
     const route = useRoute();
-    this.school = route.params.school;
-    this.propertyType = route.params.propertyType;
+    this.school = route.params.school.toString();
+    this.propertyType = route.params.propertyType.toString();
   },
-};
+});
 </script>
 
 <style scoped></style>

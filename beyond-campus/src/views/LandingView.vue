@@ -1,6 +1,6 @@
 <template>
   <div class="landing-view">
-    <Navbar></Navbar>
+    <NavBar></NavBar>
     <main class="main">
       <img
         class="main-image"
@@ -53,10 +53,11 @@
 </template>
 
 <script lang="ts">
-import Navbar from "../components/Navbar.vue";
+import { defineComponent } from "vue";
+import NavBar from "../components/NavBar.vue";
 
-export default {
-  components: { Navbar },
+export default defineComponent({
+  components: { NavBar },
   data() {
     return {
       school: "",
@@ -71,7 +72,7 @@ export default {
       });
     },
   },
-};
+});
 </script>
 
 <style scoped>

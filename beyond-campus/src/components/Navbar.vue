@@ -7,7 +7,7 @@
     <h1 class="navbar__title">
       <router-link
         class="title__router-link"
-        v-bind:to="{ path: '/', name: 'LandingView', component: LandingView }"
+        v-bind:to="{ path: '/', name: 'LandingView' }"
         >Beyond Campus</router-link
       >
     </h1>
@@ -26,9 +26,11 @@
 </template>
 
 <script lang="ts">
-import { Vue } from "vue-class-component";
+import { defineComponent } from "vue";
 
-export default class Navbar extends Vue {}
+export default defineComponent({
+  name: "NavBar",
+});
 </script>
 
 <style scoped>

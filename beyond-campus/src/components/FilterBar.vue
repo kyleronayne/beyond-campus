@@ -48,7 +48,7 @@
               class="options-form__submit-button"
               v-on:click.prevent="
                 showPropertyTypeOptions = !showPropertyTypeOptions;
-                applyPropertyTypeFilter();
+                applyPropertyTypeFilter;
               "
             >
               Apply
@@ -61,7 +61,8 @@
 </template>
 
 <script lang="ts">
-export default {
+import { defineComponent } from "vue";
+export default defineComponent({
   props: {
     propertyType: String,
   },
@@ -76,7 +77,7 @@ export default {
       console.log(this.propertyTypeOptions);
     },
   },
-};
+});
 </script>
 
 <style scoped>
