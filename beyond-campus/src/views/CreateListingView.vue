@@ -69,6 +69,11 @@ export default defineComponent({
       }
     },
     didClickRemovePrimaryPhotoButton() {
+      // Set input FileList to an empty string to emulate onChange
+      const primaryPhotoInput = document.getElementById(
+        "primary-photo-input-container__input"
+      ) as HTMLInputElement;
+      primaryPhotoInput.value = "";
       this.primaryPhoto = "";
     },
   },
