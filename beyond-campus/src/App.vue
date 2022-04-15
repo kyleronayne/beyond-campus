@@ -1,6 +1,16 @@
 <template>
+  <NavBar></NavBar>
   <router-view></router-view>
 </template>
+
+<script lang="ts">
+import { defineComponent } from "vue";
+import NavBar from "/src/components/NavBar.vue";
+
+export default defineComponent({
+  components: { NavBar },
+});
+</script>
 
 <style>
 :root {
@@ -9,6 +19,7 @@
   --theme-color-main: #1d4bd2;
   --theme-color-main-light: #d2dbf6;
   --theme-color-main-dark: #112d7e;
+  --theme-color-delete: #c70000;
 }
 
 * {

@@ -2,7 +2,11 @@
   <div class="navbar">
     <div class="navbar__left-links">
       <a class="navbar__link">Rent</a>
-      <a class="navbar__link">List A Property</a>
+      <router-link
+        class="navbar__link"
+        v-bind:to="{ path: '/create-listing', name: 'CreateListingView' }"
+        >List A Property</router-link
+      >
     </div>
     <h1 class="navbar__title">
       <router-link
@@ -69,6 +73,7 @@ export default defineComponent({
 .navbar__link {
   padding: 0.6rem;
   text-align: center;
+  text-decoration: none;
   color: white;
   background-color: var(--theme-color-main-dark);
   border-radius: 8px;

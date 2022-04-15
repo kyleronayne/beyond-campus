@@ -1,28 +1,22 @@
 <template>
-  <div>
-    <NavBar></NavBar>
+  <div class="property-search-results">
     <FilterBar v-bind:propertyType="propertyType"></FilterBar>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import NavBar from "../components/NavBar.vue";
 import FilterBar from "../components/FilterBar.vue";
 import { useRoute } from "vue-router";
 
 export default defineComponent({
-  components: { NavBar, FilterBar },
+  components: { FilterBar },
   data() {
-    return {
-      school: "",
-      propertyType: "",
-    };
-  },
-  mounted() {
     const route = useRoute();
-    this.school = route.params.school.toString();
-    this.propertyType = route.params.propertyType.toString();
+    return {
+      school: route.params.school,
+      propertyType: route.params.propertyType,
+    };
   },
 });
 </script>

@@ -1,6 +1,5 @@
 <template>
-  <div class="landing-view">
-    <NavBar></NavBar>
+  <div class="landing">
     <main class="main">
       <img
         class="main-image"
@@ -54,10 +53,9 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import NavBar from "../components/NavBar.vue";
 
 export default defineComponent({
-  components: { NavBar },
+  name: "LandingView",
   data() {
     return {
       school: "",
