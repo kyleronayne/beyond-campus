@@ -1,11 +1,12 @@
 <template>
   <div class="create-listing-view">
-    <form class="form">
-      <div class="form__property-photos-section">
-        <div class="form__form-item">
-          <label class="form-item__label">Primary Listing Photo</label>
+    <main class="main">
+      <section class="listing-photos-section">
+        <h2 class="listing-photos-section__section-heading">Listing Photos</h2>
+        <div class="listing-photos-section__section-item">
+          <label class="section-item__label">Primary Photo</label>
           <div
-            class="form-item__primary-photo-input-container"
+            class="section-item__primary-photo-input-container"
             v-on:click="didClickPrimaryPhotoInputContainer"
           >
             <img
@@ -26,15 +27,15 @@
             />
           </div>
           <button
-            class="form-item__remove-primary-photo-button"
+            class="section-item__remove-primary-photo-button"
             v-on:click.prevent="didClickRemovePrimaryPhotoButton"
             v-show="primaryPhoto"
           >
             Remove Photo
           </button>
         </div>
-      </div>
-    </form>
+      </section>
+    </main>
   </div>
 </template>
 
@@ -81,26 +82,28 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.form {
+.main {
   display: flex;
   padding: 4rem 4rem 0rem 4rem;
 }
 
-.form__property-photos-section {
+.listing-photos-section {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin-right: auto;
+}
+
+h2 {
+  padding-bottom: 2rem;
+}
+
+.listing-photos-section__section-item {
   display: flex;
   flex-direction: column;
 }
 
-.form__form-item {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-item__label {
-  font-size: 32px;
-}
-
-.form-item__primary-photo-input-container {
+.section-item__primary-photo-input-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -126,7 +129,7 @@ input[type="file"] {
   display: none;
 }
 
-.form-item__remove-primary-photo-button {
+.section-item__remove-primary-photo-button {
   align-self: center;
   padding: 0.5rem;
   background-color: white;
@@ -136,7 +139,7 @@ input[type="file"] {
   cursor: pointer;
 }
 
-.form-item__remove-primary-photo-button:hover {
+.section-item__remove-primary-photo-button:hover {
   color: white;
   background-color: var(--theme-color-delete);
 }
