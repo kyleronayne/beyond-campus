@@ -94,21 +94,21 @@
           <h2 class="section__heading">Specifications</h2>
           <div class="section__multi-item-container">
             <div class="section__item">
-              <label class="item__label" for="squareFootage"
+              <label class="item__label" for="square-footage"
                 >Square Footage</label
               >
               <input
                 class="item__input"
-                id="squareFootage"
+                id="square-footage"
                 type="text"
                 v-model="specifications.squareFootage"
               />
             </div>
             <div class="section__item">
-              <label class="item__label" for="numFloors">Floors</label>
+              <label class="item__label" for="num-floors">Floors</label>
               <select
                 class="item__select"
-                id="numFloors"
+                id="num-floors"
                 v-model="specifications.numFloors"
               >
                 <option
@@ -121,10 +121,10 @@
               </select>
             </div>
             <div class="section__item">
-              <label class="item__label" for="numBedrooms">Bedrooms</label>
+              <label class="item__label" for="num-bedrooms">Bedrooms</label>
               <select
                 class="item__select"
-                id="numBedrooms"
+                id="num-bedrooms"
                 v-model="specifications.numBedrooms"
               >
                 <option
@@ -137,10 +137,10 @@
               </select>
             </div>
             <div class="section__item">
-              <label class="item__label" for="numBathrooms">Bathrooms</label>
+              <label class="item__label" for="num-bathrooms">Bathrooms</label>
               <select
                 class="item__select"
-                id="numBedrooms"
+                id="num-bathrooms"
                 v-model="specifications.numBathrooms"
               >
                 <option
@@ -386,7 +386,7 @@ input[type="file"] {
 .item__multiSelectOptions {
   display: flex;
   flex-wrap: wrap;
-  width: 30rem;
+  width: 32.5rem;
 }
 
 #description {
@@ -394,5 +394,27 @@ input[type="file"] {
   height: 40rem;
   padding: 1rem;
   resize: none;
+}
+
+#street,
+#city {
+  width: 10rem;
+}
+
+#state,
+#num-floors,
+#num-bedrooms,
+#num-bathrooms {
+  width: 3rem;
+}
+
+#zip-code,
+#apt-unit-num,
+#square-footage,
+#rent,
+#application-fee,
+#security-deposit,
+#cleaning-fee {
+  width: 5rem;
 }
 </style>
