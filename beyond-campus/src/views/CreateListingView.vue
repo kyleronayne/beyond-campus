@@ -14,11 +14,13 @@
               class="primary-photo-input-container__upload-icon"
               src="../assets/create-listing-view/upload-icon.svg"
               v-show="!primaryPhoto"
+              alt="Grey upload icon"
             />
             <img
               class="primary-photo-input-container__photo-preview"
               v-bind:src="primaryPhoto"
               v-show="primaryPhoto"
+              alt="Listing primary photo preview"
             />
             <input
               id="primary-photo-input-container__input"
@@ -43,49 +45,158 @@
           <div class="section__multi-item-container">
             <div class="section__item">
               <label for="street" class="item__label">Street</label>
-              <input class="item__input" id="street" type="text" />
+              <input
+                class="item__input"
+                id="street"
+                type="text"
+                v-model="address.street"
+              />
             </div>
             <div class="section__item">
               <label for="city" class="item__label">City</label>
-              <input class="item__input" id="city" type="text" />
+              <input
+                class="item__input"
+                id="city"
+                type="text"
+                v-model="address.city"
+              />
             </div>
             <div class="section__item">
               <label for="state" class="item__label">State</label>
-              <select class="item__select" id="state"></select>
+              <select class="item__select" id="state" v-model="address.state">
+                <option v-for="(state, index) in states" v-bind:key="index">
+                  {{ state }}
+                </option>
+              </select>
             </div>
             <div class="section__item">
               <label for="zip-code" class="item__label">Zip Code</label>
-              <input class="item__input" id="zip-code" type="text" />
+              <input
+                class="item__input"
+                id="zip-code"
+                type="text"
+                v-model="address.zipCode"
+              />
             </div>
           </div>
           <div class="section__item">
             <label for="apt-unit-num" class="item__label">Apt/Unit #</label>
-            <input class="item__input" id="apt-unit-num" type="text" />
+            <input
+              class="item__input"
+              id="apt-unit-num"
+              type="text"
+              v-model="address.aptUnitNum"
+            />
+          </div>
+        </section>
+        <!-- Specifications Section -->
+        <section class="section">
+          <h2 class="section__heading">Specifications</h2>
+          <div class="section__multi-item-container">
+            <div class="section__item">
+              <label class="item__label" for="squareFootage"
+                >Square Footage</label
+              >
+              <input
+                class="item__input"
+                id="squareFootage"
+                type="text"
+                v-model="specifications.squareFootage"
+              />
+            </div>
+            <div class="section__item">
+              <label class="item__label" for="numFloors">Floors</label>
+              <select
+                class="item__select"
+                id="numFloors"
+                v-model="specifications.numFloors"
+              >
+                <option
+                  class="select__option"
+                  v-for="index in 5"
+                  v-bind:key="index"
+                >
+                  {{ index }}
+                </option>
+              </select>
+            </div>
+            <div class="section__item">
+              <label class="item__label" for="numBedrooms">Bedrooms</label>
+              <select
+                class="item__select"
+                id="numBedrooms"
+                v-model="specifications.numBedrooms"
+              >
+                <option
+                  class="select__option"
+                  v-for="index in 5"
+                  v-bind:key="index"
+                >
+                  {{ index }}
+                </option>
+              </select>
+            </div>
+            <div class="section__item">
+              <label class="item__label" for="numBathrooms">Bathrooms</label>
+              <select
+                class="item__select"
+                id="numBedrooms"
+                v-model="specifications.numBathrooms"
+              >
+                <option
+                  class="select__option"
+                  v-for="index in 5"
+                  v-bind:key="index"
+                >
+                  {{ index }}
+                </option>
+              </select>
+            </div>
           </div>
         </section>
         <!-- Expenses Section -->
         <section class="section">
           <h2 class="section__heading">Expenses</h2>
           <div class="section__item">
-            <label for="rent" class="item__label">Per Month Rental Cost</label>
-            <input class="item__input" id="rent" type="text" />
+            <label class="item__label" for="rent">Per Month Rental Cost</label>
+            <input
+              class="item__input"
+              id="rent"
+              type="text"
+              v-model="expenses.rent"
+            />
           </div>
           <div class="section__multi-item-container">
             <div class="section__item">
-              <label for="application-fee" class="item__label"
+              <label class="item__label" for="application-fee"
                 >Application Fee</label
               >
-              <input class="item__input" id="application-fee" type="text" />
+              <input
+                class="item__input"
+                id="application-fee"
+                type="text"
+                v-model="expenses.applicationFee"
+              />
             </div>
             <div class="section__item">
-              <label for="security-deposit" class="item__label"
+              <label class="item__label" for="security-deposit"
                 >Security Deposit</label
               >
-              <input class="item__input" id="security-deposit" type="text" />
+              <input
+                class="item__input"
+                id="security-deposit"
+                type="text"
+                v-model="expenses.securityDeposit"
+              />
             </div>
             <div class="section__item">
-              <label for="cleaning-fee" class="item__label">Cleaning Fee</label>
-              <input class="item__input" id="cleaning-fee" type="text" />
+              <label class="item__label" for="cleaning-fee">Cleaning Fee</label>
+              <input
+                class="item__input"
+                id="cleaning-fee"
+                type="text"
+                v-model="expenses.cleaningFee"
+              />
             </div>
           </div>
           <div class="section__item">
@@ -93,18 +204,22 @@
             <MultiSelectOptions
               class="item__multiSelectOptions"
               ref="includedUS"
-              v-bind:options="[
-                'Electricity',
-                'Gas',
-                'Water',
-                'Sewage',
-                'Garbage Removal',
-                'Snow Removal',
-                'Lawn Care',
-                'Internet',
-                'Cable',
-              ]"
+              v-bind:options="utilityAndServiceOptions"
             ></MultiSelectOptions>
+          </div>
+        </section>
+        <!-- Description Section -->
+        <section class="section">
+          <h2 class="section__heading">Description</h2>
+          <div class="section__item">
+            <label class="item__label" for="description"
+              >Tell renters more about the property</label
+            >
+            <textarea
+              class="item__input"
+              id="description"
+              v-model="description"
+            ></textarea>
           </div>
         </section>
       </div>
@@ -114,6 +229,10 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import {
+  states,
+  utilityAndServiceOptions,
+} from "../assets/create-listing-view/listingData";
 import MultiSelectOptions from "../components/MultiSelectOptions.vue";
 
 export default defineComponent({
@@ -121,7 +240,29 @@ export default defineComponent({
   components: { MultiSelectOptions },
   data() {
     return {
+      states: states,
+      utilityAndServiceOptions: utilityAndServiceOptions,
       primaryPhoto: "",
+      address: {
+        street: "",
+        city: "",
+        state: "",
+        zipCode: "",
+        aptUnitNum: "",
+      },
+      specifications: {
+        squareFootage: "",
+        numFloors: "",
+        numBedrooms: "",
+        numBathrooms: "",
+      },
+      expenses: {
+        rent: "",
+        applicationFee: "",
+        securityDeposit: "",
+        cleaningFee: "",
+      },
+      description: "",
     };
   },
   methods: {
@@ -246,5 +387,12 @@ input[type="file"] {
   display: flex;
   flex-wrap: wrap;
   width: 30rem;
+}
+
+#description {
+  width: 32.5rem;
+  height: 40rem;
+  padding: 1rem;
+  resize: none;
 }
 </style>
