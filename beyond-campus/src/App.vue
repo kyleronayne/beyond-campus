@@ -1,5 +1,5 @@
 <template>
-  <NavBar></NavBar>
+  <NavBar id="nav-bar"></NavBar>
   <router-view></router-view>
 </template>
 
@@ -32,5 +32,11 @@ body {
   height: 100vh;
   width: 100vw;
   font-family: var(--theme-font);
+}
+
+#nav-bar {
+  position: sticky;
+  top: 0;
+  width: 100%;
 }
 </style>
