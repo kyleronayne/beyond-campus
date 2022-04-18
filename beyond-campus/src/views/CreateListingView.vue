@@ -1,228 +1,222 @@
 <template>
-  <div class="create-listing-view">
-    <main class="main">
-      <!-- Listing Photos Section -->
-      <section class="section">
-        <h2 class="section__heading">Listing Photos</h2>
-        <div class="section__item">
-          <label class="item__label">Primary Photo</label>
-          <div
-            class="item__primary-photo-input-container"
-            v-on:click="didClickPrimaryPhotoInputContainer"
-          >
-            <img
-              class="primary-photo-input-container__upload-icon"
-              src="../assets/create-listing-view/upload-icon.svg"
-              v-show="!primaryPhoto"
-              alt="Grey upload icon"
-            />
-            <img
-              class="primary-photo-input-container__photo-preview"
-              v-bind:src="primaryPhoto"
-              v-show="primaryPhoto"
-              alt="Listing primary photo preview"
-            />
-            <input
-              id="primary-photo-input-container__input"
-              class="primary-photo-input-container__input"
-              type="file"
-              v-on:change="didUploadPrimaryPhoto($event)"
-            />
-          </div>
-          <button
-            class="item__remove-primary-photo-button"
-            v-on:click.prevent="didClickRemovePrimaryPhotoButton"
-            v-show="primaryPhoto"
-          >
-            Remove Photo
-          </button>
-        </div>
-      </section>
-      <div class="section-container">
-        <!-- Address Section -->
+  <div id="create-listing-view">
+    <main id="main">
+      <div id="section-wrapper">
+        <!-- Listing Photos Section -->
         <section class="section">
-          <h2 class="section__heading">Address</h2>
-          <div class="section__multi-item-container">
-            <div class="section__item">
-              <label for="street" class="item__label">Street</label>
-              <input
-                class="item__input"
-                id="street"
-                type="text"
-                v-model="address.street"
-              />
-            </div>
-            <div class="section__item">
-              <label for="city" class="item__label">City</label>
-              <input
-                class="item__input"
-                id="city"
-                type="text"
-                v-model="address.city"
-              />
-            </div>
-            <div class="section__item">
-              <label for="state" class="item__label">State</label>
-              <select class="item__select" id="state" v-model="address.state">
-                <option v-for="(state, index) in states" v-bind:key="index">
-                  {{ state }}
-                </option>
-              </select>
-            </div>
-            <div class="section__item">
-              <label for="zip-code" class="item__label">Zip Code</label>
-              <input
-                class="item__input"
-                id="zip-code"
-                type="text"
-                v-model="address.zipCode"
-              />
-            </div>
-          </div>
+          <h2 class="section__heading">Listing Photos</h2>
           <div class="section__item">
-            <label for="apt-unit-num" class="item__label">Apt/Unit #</label>
-            <input
-              class="item__input"
-              id="apt-unit-num"
-              type="text"
-              v-model="address.aptUnitNum"
-            />
-          </div>
-        </section>
-        <!-- Specifications Section -->
-        <section class="section">
-          <h2 class="section__heading">Specifications</h2>
-          <div class="section__multi-item-container">
-            <div class="section__item">
-              <label class="item__label" for="square-footage"
-                >Square Footage</label
-              >
-              <input
-                class="item__input"
-                id="square-footage"
-                type="text"
-                v-model="specifications.squareFootage"
-              />
-            </div>
-            <div class="section__item">
-              <label class="item__label" for="num-floors">Floors</label>
-              <select
-                class="item__select"
-                id="num-floors"
-                v-model="specifications.numFloors"
-              >
-                <option
-                  class="select__option"
-                  v-for="index in 5"
-                  v-bind:key="index"
-                >
-                  {{ index }}
-                </option>
-              </select>
-            </div>
-            <div class="section__item">
-              <label class="item__label" for="num-bedrooms">Bedrooms</label>
-              <select
-                class="item__select"
-                id="num-bedrooms"
-                v-model="specifications.numBedrooms"
-              >
-                <option
-                  class="select__option"
-                  v-for="index in 5"
-                  v-bind:key="index"
-                >
-                  {{ index }}
-                </option>
-              </select>
-            </div>
-            <div class="section__item">
-              <label class="item__label" for="num-bathrooms">Bathrooms</label>
-              <select
-                class="item__select"
-                id="num-bathrooms"
-                v-model="specifications.numBathrooms"
-              >
-                <option
-                  class="select__option"
-                  v-for="index in 5"
-                  v-bind:key="index"
-                >
-                  {{ index }}
-                </option>
-              </select>
-            </div>
-          </div>
-        </section>
-        <!-- Expenses Section -->
-        <section class="section">
-          <h2 class="section__heading">Expenses</h2>
-          <div class="section__item">
-            <label class="item__label" for="rent">Per Month Rental Cost</label>
-            <input
-              class="item__input"
-              id="rent"
-              type="text"
-              v-model="expenses.rent"
-            />
-          </div>
-          <div class="section__multi-item-container">
-            <div class="section__item">
-              <label class="item__label" for="application-fee"
-                >Application Fee</label
-              >
-              <input
-                class="item__input"
-                id="application-fee"
-                type="text"
-                v-model="expenses.applicationFee"
-              />
-            </div>
-            <div class="section__item">
-              <label class="item__label" for="security-deposit"
-                >Security Deposit</label
-              >
-              <input
-                class="item__input"
-                id="security-deposit"
-                type="text"
-                v-model="expenses.securityDeposit"
-              />
-            </div>
-            <div class="section__item">
-              <label class="item__label" for="cleaning-fee">Cleaning Fee</label>
-              <input
-                class="item__input"
-                id="cleaning-fee"
-                type="text"
-                v-model="expenses.cleaningFee"
-              />
-            </div>
-          </div>
-          <div class="section__item">
-            <span class="item__label">Included Utilities and Services</span>
-            <MultiSelectOptions
-              class="item__multiSelectOptions"
-              ref="includedUS"
-              v-bind:options="utilityAndServiceOptions"
-            ></MultiSelectOptions>
-          </div>
-        </section>
-        <!-- Description Section -->
-        <section class="section">
-          <h2 class="section__heading">Description</h2>
-          <div class="section__item">
-            <label class="item__label" for="description"
-              >Tell renters more about the property</label
+            <label class="item__label">Primary Photo</label>
+            <div
+              id="primary-photo-input-container"
+              v-on:click="didClickPrimaryPhotoInputContainer"
             >
-            <textarea
-              class="item__input"
-              id="description"
-              v-model="description"
-            ></textarea>
+              <img
+                id="primary-photo-upload-icon"
+                src="../assets/create-listing-view/upload-icon.svg"
+                v-show="!primaryPhoto"
+                alt="Grey upload icon"
+              />
+              <img
+                id="primary-photo-preview"
+                v-bind:src="primaryPhoto"
+                v-show="primaryPhoto"
+                alt="Listing primary photo preview"
+              />
+              <input
+                id="primary-photo-input"
+                type="file"
+                v-on:change="didUploadPrimaryPhoto($event)"
+              />
+            </div>
+            <button
+              id="remove-primary-photo-button"
+              v-on:click.prevent="didClickRemovePrimaryPhotoButton"
+              v-show="primaryPhoto"
+            >
+              Remove Photo
+            </button>
           </div>
         </section>
+        <div id="section-container">
+          <!-- Address Section -->
+          <section class="section">
+            <h2 class="section__heading">Address</h2>
+            <div class="section__multi-item-container">
+              <div class="section__item">
+                <label class="item__label" for="street">Street</label>
+                <input
+                  class="item__input"
+                  id="street"
+                  type="text"
+                  v-model="address.street"
+                />
+              </div>
+              <div class="section__item">
+                <label class="item__label" for="city">City</label>
+                <input
+                  class="item__input"
+                  id="city"
+                  type="text"
+                  v-model="address.city"
+                />
+              </div>
+              <div class="section__item">
+                <label class="item__label" for="state">State</label>
+                <select class="item__select" id="state" v-model="address.state">
+                  <option v-for="(state, index) in states" v-bind:key="index">
+                    {{ state }}
+                  </option>
+                </select>
+              </div>
+              <div class="section__item">
+                <label class="item__label" for="zip-code">Zip Code</label>
+                <input
+                  class="item__input"
+                  id="zip-code"
+                  type="text"
+                  v-model="address.zipCode"
+                />
+              </div>
+            </div>
+            <div class="section__item">
+              <label class="item__label" for="apt-unit-num">Apt/Unit #</label>
+              <input
+                class="item__input"
+                id="apt-unit-num"
+                type="text"
+                v-model="address.aptUnitNum"
+              />
+            </div>
+          </section>
+          <!-- Specifications Section -->
+          <section class="section">
+            <h2 class="section__heading">Specifications</h2>
+            <div class="section__multi-item-container">
+              <div class="section__item">
+                <label class="item__label" for="square-footage"
+                  >Square Footage</label
+                >
+                <input
+                  class="item__input"
+                  id="square-footage"
+                  type="text"
+                  v-model="specifications.squareFootage"
+                />
+              </div>
+              <div class="section__item">
+                <label class="item__label" for="num-floors">Floors</label>
+                <select
+                  class="item__select"
+                  id="num-floors"
+                  v-model="specifications.numFloors"
+                >
+                  <option v-for="index in 5" v-bind:key="index">
+                    {{ index }}
+                  </option>
+                </select>
+              </div>
+              <div class="section__item">
+                <label class="item__label" for="num-bedrooms">Bedrooms</label>
+                <select
+                  class="item__select"
+                  id="num-bedrooms"
+                  v-model="specifications.numBedrooms"
+                >
+                  <option v-for="index in 5" v-bind:key="index">
+                    {{ index }}
+                  </option>
+                </select>
+              </div>
+              <div class="section__item">
+                <label class="item__label" for="num-bathrooms">Bathrooms</label>
+                <select
+                  class="item__select"
+                  id="num-bathrooms"
+                  v-model="specifications.numBathrooms"
+                >
+                  <option v-for="index in 5" v-bind:key="index">
+                    {{ index }}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </section>
+          <!-- Expenses Section -->
+          <section class="section">
+            <h2 class="section__heading">Expenses</h2>
+            <div class="section__item">
+              <label class="item__label" for="rent"
+                >Per Month Rental Cost</label
+              >
+              <input
+                class="item__input"
+                id="rent"
+                type="text"
+                v-model="expenses.rent"
+              />
+            </div>
+            <div class="section__multi-item-container">
+              <div class="section__item">
+                <label class="item__label" for="application-fee"
+                  >Application Fee</label
+                >
+                <input
+                  class="item__input"
+                  id="application-fee"
+                  type="text"
+                  v-model="expenses.applicationFee"
+                />
+              </div>
+              <div class="section__item">
+                <label class="item__label" for="security-deposit"
+                  >Security Deposit</label
+                >
+                <input
+                  class="item__input"
+                  id="security-deposit"
+                  type="text"
+                  v-model="expenses.securityDeposit"
+                />
+              </div>
+              <div class="section__item">
+                <label class="item__label" for="cleaning-fee"
+                  >Cleaning Fee</label
+                >
+                <input
+                  class="item__input"
+                  id="cleaning-fee"
+                  type="text"
+                  v-model="expenses.cleaningFee"
+                />
+              </div>
+            </div>
+            <div class="section__item">
+              <span class="item__label">Included Utilities and Services</span>
+              <MultiSelectOptions
+                id="included-utilities-services-options"
+                ref="includedUS"
+                v-bind:options="utilityAndServiceOptions"
+              ></MultiSelectOptions>
+            </div>
+          </section>
+          <!-- Description Section -->
+          <section class="section">
+            <h2 class="section__heading">Description</h2>
+            <div class="section__item">
+              <label class="item__label" for="description"
+                >Tell renters more about the property</label
+              >
+              <textarea
+                class="item__input"
+                id="description"
+                v-model="description"
+              ></textarea>
+            </div>
+          </section>
+        </div>
       </div>
+      <button id="create-listing-button">Create Listing</button>
     </main>
   </div>
 </template>
@@ -268,9 +262,7 @@ export default defineComponent({
   methods: {
     didClickPrimaryPhotoInputContainer(): void {
       if (!this.primaryPhoto) {
-        document
-          .getElementById("primary-photo-input-container__input")
-          ?.click();
+        document.getElementById("primary-photo-input")?.click();
       }
     },
     didUploadPrimaryPhoto(event: { target: { files: any[] } }): void {
@@ -288,7 +280,7 @@ export default defineComponent({
     didClickRemovePrimaryPhotoButton(): void {
       // Set input FileList to an empty string to emulate onChange
       const primaryPhotoInput = document.getElementById(
-        "primary-photo-input-container__input"
+        "primary-photo-input"
       ) as HTMLInputElement;
       primaryPhotoInput.value = "";
       this.primaryPhoto = "";
@@ -302,37 +294,21 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.main {
-  display: flex;
-  padding: 4rem 6rem 0rem 6rem;
-}
-
-.section {
+/* ID Selectors */
+#main {
   display: flex;
   flex-direction: column;
-  width: fit-content;
-  margin-right: auto;
+  align-items: center;
+  padding: 4rem 6rem 4rem 6rem;
 }
 
-h2 {
+#section-wrapper {
+  display: flex;
+  gap: 6rem;
   padding-bottom: 2rem;
 }
 
-.section__item {
-  padding-bottom: 1rem;
-}
-
-div[class$="section__item"] {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 2rem;
-}
-
-.item__label {
-  padding-bottom: 1rem;
-}
-
-.item__primary-photo-input-container {
+#primary-photo-input-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -344,21 +320,21 @@ div[class$="section__item"] {
   cursor: pointer;
 }
 
-.primary-photo-input-container__upload-icon {
+#primary-photo-upload-icon {
   height: 6rem;
   width: 6rem;
 }
 
-.primary-photo-input-container__photo-preview {
+#primary-photo-preview {
   height: 24rem;
   width: 34rem;
 }
 
-input[type="file"] {
+#primary-photo-input {
   display: none;
 }
 
-.item__remove-primary-photo-button {
+#remove-primary-photo-button {
   align-self: center;
   padding: 0.5rem;
   background-color: white;
@@ -368,32 +344,36 @@ input[type="file"] {
   cursor: pointer;
 }
 
-.item__remove-primary-photo-button:hover {
+#remove-primary-photo-button:hover {
   color: white;
   background-color: var(--theme-color-delete);
 }
 
-.section-container {
+#section-container {
   display: flex;
   flex-direction: column;
 }
 
-.section__multi-item-container {
-  display: flex;
-  gap: 2rem;
-}
-
-.item__multiSelectOptions {
+#included-utilities-services-options {
   display: flex;
   flex-wrap: wrap;
   width: 32.5rem;
 }
 
-#description {
+#create-listing-button {
   width: 32.5rem;
-  height: 40rem;
-  padding: 1rem;
-  resize: none;
+  padding: 1.5rem;
+  color: var(--theme-color-main);
+  background-color: white;
+  border: 2px solid var(--theme-color-main);
+  border-radius: 40px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+#create-listing-button:hover {
+  background-color: var(--theme-color-main);
+  color: white;
 }
 
 #street,
@@ -405,7 +385,7 @@ input[type="file"] {
 #num-floors,
 #num-bedrooms,
 #num-bathrooms {
-  width: 3rem;
+  width: 3.5rem;
 }
 
 #zip-code,
@@ -416,5 +396,53 @@ input[type="file"] {
 #security-deposit,
 #cleaning-fee {
   width: 5rem;
+}
+
+#description {
+  width: 32.5rem;
+  height: 40rem;
+  padding: 1rem;
+  resize: none;
+}
+
+/* Class Selectors */
+.section {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  margin-right: auto;
+}
+
+.section__heading {
+  padding: 2rem 0rem 1rem 0rem;
+}
+
+.section__item {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 1rem;
+}
+
+.item__label {
+  padding-bottom: 1rem;
+}
+
+.item__input {
+  padding: 0.35rem;
+  border: 1px solid black;
+  border-radius: 4px;
+  outline-color: var(--theme-color-main);
+}
+
+.item__select {
+  padding: 0.35rem;
+  border: 1px solid black;
+  border-radius: 4px;
+  outline-color: var(--theme-color-main);
+}
+
+.section__multi-item-container {
+  display: flex;
+  gap: 2rem;
 }
 </style>
