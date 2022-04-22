@@ -25,15 +25,36 @@
         />
         <span class="profile-link__username"></span>
       </a>
+      <button id="button" @click="leaving">Logout</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signOut,
+  UserCredential,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 
 export default defineComponent({
   name: "NavBar",
+  data() {
+    return {
+      auth: getAuth(),
+    };
+  },
+  methods: {
+    leaving(): void {
+      if (this.auth) signOut(this.auth);
+
+      this.$router.push({ path: "/", name: "LoginView" });
+    },
+  },
 });
 </script>
 
@@ -88,5 +109,13 @@ export default defineComponent({
 [class*="profile-link"] {
   display: flex;
   align-items: center;
+}
+
+#button {
+  padding: 5px;
+  background-color: var(--theme-color-main-dark);
+  color: white;
+  border-color: var(--theme-color-main-dark);
+  border-radius: 8px;
 }
 </style>
