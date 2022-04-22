@@ -1,13 +1,26 @@
 <template>
   <div id="loginpanel">
-    <input type="text" v-model="u_email" placeholder="Enter your email" />
-    <input type="password" v-model="u_pass" placeholder="Enter your password" />
+    <input
+      type="text"
+      v-model="u_email"
+      placeholder="Enter your email"
+      id="textInput"
+    />
+    <input
+      type="password"
+      v-model="u_pass"
+      placeholder="Enter your password"
+      id="textInput"
+    />
     <div id="withProvider">
-      <button :disabled="!isValidInput" @click="createAccount">Signup</button>
-      <button :disabled="!isValidInput" @click="withEmail">Login</button>
-    </div>
-    <div>
-      <button @click="withGMail">Google</button>
+      <button @click="createAccount">
+        Signup
+        <router-link
+          v-bind:to="{ path: '/signup', name: 'SignupView' }"
+        ></router-link>
+      </button>
+      <button @click="withEmail">Login</button>
+      <button @click="withGMail">Sign in with Google</button>
     </div>
   </div>
 </template>
@@ -22,6 +35,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { collection, doc, setDoc } from "firebase/firestore";
+import db from "../main";
 export default defineComponent({
   name: "LoginView",
   data() {
@@ -29,35 +44,18 @@ export default defineComponent({
       u_pass: "",
       u_email: "",
       auth: getAuth(),
+      db: db,
     };
   },
   methods: {
-    //   u_email = "";
-    //   u_pass = "";
-    //   auth: Auth | null = null;
-
-    isValidInput(): boolean {
-      return this.u_email.length > 0 && this.u_pass.length > 0;
-    },
-
-    //   mounted(): void {
-    //     this.auth = getAuth();
-    //   },
-
     createAccount(): void {
-      createUserWithEmailAndPassword(this.auth!, this.u_email, this.u_pass)
-        .then((cr: UserCredential) => {
-          alert(`New account created with UID ${cr.user.uid}`);
-        })
-        .catch((err: any) => {
-          alert(`Unable to create account ${err}`);
-        });
+      this.$router.push({ path: "/signup" });
     },
 
     withEmail(): void {
       signInWithEmailAndPassword(this.auth!, this.u_email, this.u_pass)
         .then((cr: UserCredential) => {
-          this.$router.push({ path: "/home" });
+          this.$router.push({ path: "/landing" });
         })
         .catch((err: any) => {
           alert(`Unable to login ${err}`);
@@ -70,7 +68,7 @@ export default defineComponent({
         console.log("Yes, logged in");
 
         // Move to the home page
-        this.$router.push({ path: "/home" });
+        this.$router.push({ path: "/landing" });
       });
     },
   },
@@ -79,3 +77,33 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+#loginpanel {
+  position: fixed;
+  left: 40%;
+  top: 30%;
+  background-color: var(--theme-color-main);
+  border: 3px solid black;
+  display: inline-flex;
+  flex-direction: column;
+  width: 35vh;
+  height: fit-content;
+  border-radius: 4px;
+  padding-top: 5px;
+}
+
+#textInput {
+  margin: 4px;
+}
+
+#withProvider {
+  display: flex;
+  flex-direction: column;
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  margin-block: 5px;
+}
+</style>
