@@ -1,0 +1,159 @@
+/* ID Selectors */
+#main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4rem 6rem 4rem 6rem;
+  }
+  
+  #section-wrapper {
+    display: flex;
+    gap: 6rem;
+    padding-bottom: 2rem;
+  }
+  
+  #primary-photo-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25rem;
+    width: 35rem;
+    margin-bottom: 1rem;
+    border: 2px dashed #d3d3d3;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  #primary-photo-upload-icon {
+    height: 6rem;
+    width: 6rem;
+  }
+  
+  #primary-photo-preview {
+    height: 24rem;
+    width: 34rem;
+  }
+  
+  #primary-photo-input {
+    display: none;
+  }
+  
+  #remove-primary-photo-button {
+    align-self: center;
+    padding: 0.5rem;
+    background-color: white;
+    color: var(--theme-color-delete);
+    border: 2px solid var(--theme-color-delete);
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  #remove-primary-photo-button:hover {
+    color: white;
+    background-color: var(--theme-color-delete);
+  }
+  
+  #section-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  #included-utilities-services-options {
+    display: flex;
+    flex-wrap: wrap;
+    width: 32.5rem;
+  }
+  
+  #create-listing-button {
+    width: 32.5rem;
+    padding: 1.5rem;
+    color: var(--theme-color-main);
+    background-color: white;
+    border: 2px solid var(--theme-color-main);
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  
+  #create-listing-button:hover {
+    background-color: var(--theme-color-main);
+    color: white;
+  }
+  
+  #street,
+  #city {
+    width: 10rem;
+  }
+  
+  #state,
+  #num-floors,
+  #num-bedrooms,
+  #num-bathrooms {
+    width: 3.5rem;
+  }
+  
+  #zip-code,
+  #apt-unit-num,
+  #square-footage,
+  #rent,
+  #application-fee,
+  #security-deposit,
+  #cleaning-fee {
+    width: 5rem;
+  }
+  
+  #description {
+    width: 32.5rem;
+    height: 40rem;
+    padding: 1rem;
+    resize: none;
+  }
+  
+  /* Class Selectors */
+  .section {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin-right: auto;
+  }
+  
+  .section__heading {
+    padding: 2rem 0rem 1rem 0rem;
+  }
+  
+  .section__item {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 1rem;
+  }
+  
+  .item__label {
+    padding-bottom: 1rem;
+  }
+  
+  .item__input {
+    padding: 0.35rem;
+    border: 1px solid black;
+    border-radius: 4px;
+    outline-color: var(--theme-color-main);
+  }
+  
+  .item__select {
+    padding: 0.35rem;
+    border: 1px solid black;
+    border-radius: 4px;
+    outline-color: var(--theme-color-main);
+  }
+  
+  .section__multi-item-container {
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .item__eligible-university {
+    width: fit-content;
+    padding: 0.25rem 0.5rem 0.25rem 0.5rem;
+    color: var(--theme-color-main);
+    border: 2px solid var(--theme-color-main);
+    border-radius: 14px;
+  }

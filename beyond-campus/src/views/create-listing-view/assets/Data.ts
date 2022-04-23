@@ -1,4 +1,4 @@
-const states: string[] = [
+const States: string[] = [
   "AL",
   "AK",
   "AZ",
@@ -51,7 +51,7 @@ const states: string[] = [
   "WY",
 ];
 
-const utilityAndServiceOptions: string[] = [
+const UtilityAndServiceOptions: string[] = [
   "Electricity",
   "Gas",
   "Water",
@@ -63,4 +63,4 @@ const utilityAndServiceOptions: string[] = [
   "Cable",
 ];
 
-export { states, utilityAndServiceOptions };
+export { States, UtilityAndServiceOptions };

@@ -13,7 +13,7 @@
             >
               <img
                 id="primary-photo-upload-icon"
-                src="../assets/create-listing-view/upload-icon.svg"
+                src="../create-listing-view/assets/upload-icon.svg"
                 v-show="!primaryPhoto"
                 alt="Grey upload icon"
               />
@@ -58,7 +58,7 @@
                   class="item__input"
                   id="city"
                   type="text"
-                  v-model="address.city"
+                  v-model.lazy="address.city"
                 />
               </div>
               <div class="section__item">
@@ -87,6 +87,17 @@
                 type="text"
                 v-model="address.aptUnitNum"
               />
+            </div>
+            <div class="section__item">
+              <span class="item__label"
+                >Students at these schools will see your property:</span
+              >
+              <span
+                class="item__eligible-university"
+                v-for="(school, index) in targetedSchools"
+                v-bind:key="index"
+                >{{ school }}</span
+              >
             </div>
           </section>
           <!-- Specifications Section -->
@@ -216,55 +227,110 @@
           </section>
         </div>
       </div>
-      <button id="create-listing-button">Create Listing</button>
+      <button id="create-listing-button" v-on:click="didClickCreateListing">
+        Create Listing
+      </button>
     </main>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { Address, Specifications, Expenses } from "./assets/DataTypes";
+import { States, UtilityAndServiceOptions } from "./assets/Data";
+import MultiSelectOptions from "../../components/MultiSelectOptions.vue";
+import { User, getAuth } from "firebase/auth";
 import {
-  states,
-  utilityAndServiceOptions,
-} from "../assets/create-listing-view/listingData";
-import MultiSelectOptions from "../components/MultiSelectOptions.vue";
+  Firestore,
+  getFirestore,
+  DocumentReference,
+  doc,
+  getDoc,
+} from "firebase/firestore";
 
 export default defineComponent({
   name: "CreateListingView",
   components: { MultiSelectOptions },
   data() {
+    const database: Firestore = getFirestore();
+    const currentUser: User | null = getAuth().currentUser;
+    const states: string[] = States;
+    let targetedSchools: string[] = [];
+    let address: Address = {
+      street: "",
+      city: "",
+      state: "",
+      zipCode: "",
+      aptUnitNum: "",
+    };
+    let specifications: Specifications = {
+      squareFootage: "",
+      numFloors: "",
+      numBedrooms: "",
+      numBathrooms: "",
+    };
+    let expenses: Expenses = {
+      rent: "",
+      applicationFee: "",
+      securityDeposit: "",
+      cleaningFee: "",
+    };
+
     return {
-      states: states,
-      utilityAndServiceOptions: utilityAndServiceOptions,
+      database,
+      currentUser,
       primaryPhoto: "",
-      address: {
-        street: "",
-        city: "",
-        state: "",
-        zipCode: "",
-        aptUnitNum: "",
-      },
-      specifications: {
-        squareFootage: "",
-        numFloors: "",
-        numBedrooms: "",
-        numBathrooms: "",
-      },
-      expenses: {
-        rent: "",
-        applicationFee: "",
-        securityDeposit: "",
-        cleaningFee: "",
-      },
+      states,
+      address,
+      targetedSchools,
+      specifications,
+      expenses,
+      utilityAndServiceOptions: UtilityAndServiceOptions,
       description: "",
     };
   },
+  watch: {
+    address: {
+      /**
+       * Sets the targetedSchools array based on the user-provided location
+       */
+      handler() {
+        if (this.address.city && this.address.state) {
+          // If the user has entered a state and city
+          this.targetedSchools = [];
+          const state: string = this.address.state.toString();
+          const city: string = this.address.city.toString();
+          const stateDocPath: string = `SchoolLocations/${state}`.toString();
+          const stateDoc: DocumentReference = doc(this.database, stateDocPath);
+
+          getDoc(stateDoc).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+              for (const school in docSnapshot.data()) {
+                if (docSnapshot.data()[school].includes(city)) {
+                  // If school array contains the user-provided city
+                  this.targetedSchools.push(school);
+                }
+              }
+            }
+          });
+        }
+      },
+      deep: true,
+    },
+  },
   methods: {
+    /**
+     * Clicks the primary photo input to open the file selector
+     */
     didClickPrimaryPhotoInputContainer(): void {
       if (!this.primaryPhoto) {
+        // If the user has not selected a primary photo
         document.getElementById("primary-photo-input")?.click();
       }
     },
+    /**
+     * Sets the primaryPhoto string to the selected photo's BLOB
+     */
     didUploadPrimaryPhoto(event: { target: { files: any[] } }): void {
       const file = event.target.files[0];
       if (file) {
@@ -277,14 +343,20 @@ export default defineComponent({
         }
       }
     },
+    /**
+     * Sets the primary photo input value and primaryPhoto string to empty
+     */
     didClickRemovePrimaryPhotoButton(): void {
-      // Set input FileList to an empty string to emulate onChange
+      // Set input FileList to an empty string to emulate onChange event
       const primaryPhotoInput = document.getElementById(
         "primary-photo-input"
       ) as HTMLInputElement;
       primaryPhotoInput.value = "";
       this.primaryPhoto = "";
     },
+    /**
+     * Returns the selected included utilities and services
+     */
     getIncludedUS(): string[] {
       return (this.$refs.includedUS as InstanceType<typeof MultiSelectOptions>)
         .selectedOptions;
@@ -294,155 +366,5 @@ export default defineComponent({
 </script>
 
 <style scoped>
-/* ID Selectors */
-#main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 4rem 6rem 4rem 6rem;
-}
-
-#section-wrapper {
-  display: flex;
-  gap: 6rem;
-  padding-bottom: 2rem;
-}
-
-#primary-photo-input-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 25rem;
-  width: 35rem;
-  margin-bottom: 1rem;
-  border: 2px dashed #d3d3d3;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-#primary-photo-upload-icon {
-  height: 6rem;
-  width: 6rem;
-}
-
-#primary-photo-preview {
-  height: 24rem;
-  width: 34rem;
-}
-
-#primary-photo-input {
-  display: none;
-}
-
-#remove-primary-photo-button {
-  align-self: center;
-  padding: 0.5rem;
-  background-color: white;
-  color: var(--theme-color-delete);
-  border: 2px solid var(--theme-color-delete);
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-#remove-primary-photo-button:hover {
-  color: white;
-  background-color: var(--theme-color-delete);
-}
-
-#section-container {
-  display: flex;
-  flex-direction: column;
-}
-
-#included-utilities-services-options {
-  display: flex;
-  flex-wrap: wrap;
-  width: 32.5rem;
-}
-
-#create-listing-button {
-  width: 32.5rem;
-  padding: 1.5rem;
-  color: var(--theme-color-main);
-  background-color: white;
-  border: 2px solid var(--theme-color-main);
-  border-radius: 40px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-#create-listing-button:hover {
-  background-color: var(--theme-color-main);
-  color: white;
-}
-
-#street,
-#city {
-  width: 10rem;
-}
-
-#state,
-#num-floors,
-#num-bedrooms,
-#num-bathrooms {
-  width: 3.5rem;
-}
-
-#zip-code,
-#apt-unit-num,
-#square-footage,
-#rent,
-#application-fee,
-#security-deposit,
-#cleaning-fee {
-  width: 5rem;
-}
-
-#description {
-  width: 32.5rem;
-  height: 40rem;
-  padding: 1rem;
-  resize: none;
-}
-
-/* Class Selectors */
-.section {
-  display: flex;
-  flex-direction: column;
-  width: fit-content;
-  margin-right: auto;
-}
-
-.section__heading {
-  padding: 2rem 0rem 1rem 0rem;
-}
-
-.section__item {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 1rem;
-}
-
-.item__label {
-  padding-bottom: 1rem;
-}
-
-.item__input {
-  padding: 0.35rem;
-  border: 1px solid black;
-  border-radius: 4px;
-  outline-color: var(--theme-color-main);
-}
-
-.item__select {
-  padding: 0.35rem;
-  border: 1px solid black;
-  border-radius: 4px;
-  outline-color: var(--theme-color-main);
-}
-
-.section__multi-item-container {
-  display: flex;
-  gap: 2rem;
-}
+@import "../create-listing-view/CreateListingView.css";
 </style>

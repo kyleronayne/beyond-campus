@@ -2,7 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import LoginView from "../views/LoginView.vue";
 import LandingView from "../views/LandingView.vue";
 import PropertySearchResultsView from "../views/PropertySearchResultsView.vue";
-import CreateListingView from "../views/CreateListingView.vue";
+import CreateListingView from "../views/create-listing-view/CreateListingView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
