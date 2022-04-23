@@ -32,10 +32,8 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   UserCredential,
-  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { collection, doc, setDoc } from "firebase/firestore";
 import db from "../main";
 export default defineComponent({
   name: "LoginView",
@@ -55,7 +53,7 @@ export default defineComponent({
     withEmail(): void {
       signInWithEmailAndPassword(this.auth!, this.u_email, this.u_pass)
         .then((cr: UserCredential) => {
-          this.$router.push({ path: "/landing" });
+          this.$router.push({ path: "/" });
         })
         .catch((err: any) => {
           alert(`Unable to login ${err}`);
@@ -68,7 +66,7 @@ export default defineComponent({
         console.log("Yes, logged in");
 
         // Move to the home page
-        this.$router.push({ path: "/landing" });
+        this.$router.push({ path: "/" });
       });
     },
   },
