@@ -3,17 +3,23 @@ import LoginView from "../views/LoginView.vue";
 import LandingView from "../views/LandingView.vue";
 import PropertySearchResultsView from "../views/PropertySearchResultsView.vue";
 import CreateListingView from "../views/create-listing-view/CreateListingView.vue";
+import SignupView from "../views/SignupView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/login",
+    path: "/",
     name: "LoginView",
     component: LoginView,
   },
   {
-    path: "/",
+    path: "/landing",
     name: "LandingView",
     component: LandingView,
+  },
+  {
+    path: "/signup",
+    name: "SignupView",
+    component: SignupView,
   },
   {
     path: "/property-search-results",
