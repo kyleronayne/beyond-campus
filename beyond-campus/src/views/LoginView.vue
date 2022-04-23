@@ -34,7 +34,7 @@ import {
   UserCredential,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import db from "../main";
+import database from "../main";
 export default defineComponent({
   name: "LoginView",
   data() {
@@ -42,7 +42,7 @@ export default defineComponent({
       u_pass: "",
       u_email: "",
       auth: getAuth(),
-      db: db,
+      db: database,
     };
   },
   methods: {
@@ -64,7 +64,6 @@ export default defineComponent({
       const provider = new GoogleAuthProvider();
       signInWithPopup(this.auth, provider).then((cred: UserCredential) => {
         console.log("Yes, logged in");
-
         // Move to the home page
         this.$router.push({ path: "/" });
       });

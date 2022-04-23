@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar">
+  <div id="navbar">
     <div class="navbar__left-links">
       <a class="navbar__link">Rent</a>
       <router-link
@@ -17,54 +17,68 @@
     </h1>
     <div class="navbar__right-links">
       <a class="navbar__link">Saved Properties</a>
-      <a class="navbar__link profile-link">
+      <a class="navbar__link profile-link" v-if="isLoggedIn">
         <img
           class="profile-link__icon"
           src="../assets/navbar/images/profile-icon.svg"
           alt="White user profile icon"
         />
-        <span class="profile-link__username"></span>
+        <span id="username">{{ getUsername() }}</span>
       </a>
-      <button id="button" @click="leaving">Logout</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signOut,
-  UserCredential,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { Auth, getAuth, onAuthStateChanged } from "firebase/auth";
 
 export default defineComponent({
   name: "NavBar",
   data() {
+    let auth: Auth = getAuth();
+    let isLoggedIn = false;
+
     return {
-      auth: getAuth(),
+      auth,
+      isLoggedIn,
     };
   },
+  mounted() {
+    onAuthStateChanged(this.auth, (user) => {
+      this.isLoggedIn = user ? true : false;
+    });
+  },
   methods: {
-    leaving(): void {
-      if (this.auth) signOut(this.auth);
-
-      this.$router.push({ path: "/", name: "LoginView" });
+    /**
+     * Returns the username of the current user
+     */
+    getUsername(): string {
+      if (this.auth.currentUser!.providerData[0].providerId === "google.com") {
+        return this.auth.currentUser!.displayName!.split(" ")[0];
+      } else {
+        return "";
+      }
     },
   },
 });
 </script>
 
 <style scoped>
-.navbar {
+/* ID Selectors */
+#username {
+  padding-left: 0.5rem;
+}
+
+#navbar {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
   background-color: var(--theme-color-main);
+  position: sticky;
+  top: 0;
+  width: 100%;
 }
 
 .navbar__left-links {

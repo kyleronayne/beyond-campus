@@ -1,11 +1,11 @@
 <template>
-  <NavBar id="nav-bar"></NavBar>
+  <NavBar></NavBar>
   <router-view></router-view>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import NavBar from "/src/components/Navbar.vue";
+import NavBar from "/src/components/NavBar.vue";
 
 export default defineComponent({
   components: { NavBar },
@@ -32,11 +32,5 @@ body {
   height: 100vh;
   width: 100vw;
   font-family: var(--theme-font);
-}
-
-#nav-bar {
-  position: sticky;
-  top: 0;
-  width: 100%;
 }
 </style>

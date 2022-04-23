@@ -5,8 +5,8 @@ import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "./FirebaseConfig";
 import { Firestore, getFirestore } from "firebase/firestore";
 const app = initializeApp(firebaseConfig);
-const db: Firestore = getFirestore(app);
+const database: Firestore = getFirestore(app);
 
 createApp(App).use(router).mount("#app");
 
-export default db;
+export default database;
