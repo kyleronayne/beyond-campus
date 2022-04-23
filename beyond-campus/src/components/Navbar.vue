@@ -1,25 +1,25 @@
 <template>
   <div id="navbar">
-    <div class="navbar__left-links">
-      <a class="navbar__link">Rent</a>
+    <div id="left-links-container">
+      <a class="link">Rent</a>
       <router-link
-        class="navbar__link"
+        class="link"
         v-bind:to="{ path: '/create-listing', name: 'CreateListingView' }"
         >List A Property</router-link
       >
     </div>
-    <h1 class="navbar__title">
+    <h1 id="title">
       <router-link
-        class="title__router-link"
+        id="landing-link"
         v-bind:to="{ path: '/', name: 'LandingView' }"
         >Beyond Campus</router-link
       >
     </h1>
-    <div class="navbar__right-links">
-      <a class="navbar__link">Saved Properties</a>
-      <a class="navbar__link profile-link" v-if="isLoggedIn">
+    <div id="right-links-container">
+      <a class="link">Saved Properties</a>
+      <a id="profile-link" class="link no-hover" v-if="isLoggedIn">
         <img
-          class="profile-link__icon"
+          id="profile-icon"
           src="../assets/navbar/images/profile-icon.svg"
           alt="White user profile icon"
         />
@@ -66,10 +66,6 @@ export default defineComponent({
 
 <style scoped>
 /* ID Selectors */
-#username {
-  padding-left: 0.5rem;
-}
-
 #navbar {
   display: flex;
   align-items: center;
@@ -81,31 +77,41 @@ export default defineComponent({
   width: 100%;
 }
 
-.navbar__left-links {
+#left-links-container {
   display: flex;
   align-items: center;
   gap: 2rem;
 }
 
-.navbar__title {
+#title {
   padding: 0rem 6rem 0rem 6rem;
   text-align: center;
   font-size: 48px;
   font-weight: var(--theme-font-weight-bold);
 }
 
-.title__router-link {
+#landing-link {
   color: white;
   text-decoration: none;
 }
 
-.navbar__right-links {
+#right-links-container {
   display: flex;
   align-items: center;
   gap: 2rem;
 }
 
-.navbar__link {
+#profile-link {
+  display: flex;
+  align-items: center;
+}
+
+#username {
+  padding-left: 0.5rem;
+}
+
+/* Class Selectors */
+.link {
   padding: 0.6rem;
   text-align: center;
   text-decoration: none;
@@ -116,20 +122,10 @@ export default defineComponent({
   transition: 0.2s linear;
 }
 
-.navbar__link:hover {
+.link.no-hover:hover {
+  transform: none;
+}
+.link:hover {
   transform: translateY(-5px);
-}
-
-[class*="profile-link"] {
-  display: flex;
-  align-items: center;
-}
-
-#button {
-  padding: 5px;
-  background-color: var(--theme-color-main-dark);
-  color: white;
-  border-color: var(--theme-color-main-dark);
-  border-radius: 8px;
 }
 </style>
