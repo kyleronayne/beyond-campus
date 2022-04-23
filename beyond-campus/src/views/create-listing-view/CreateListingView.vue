@@ -227,7 +227,10 @@
           </section>
         </div>
       </div>
-      <button id="create-listing-button" v-on:click="didClickCreateListing">
+      <button
+        id="create-listing-button"
+        v-on:click="didClickCreateListingButton"
+      >
         Create Listing
       </button>
     </main>
@@ -236,23 +239,22 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Address, Specifications, Expenses } from "./assets/DataTypes";
+import {
+  Address,
+  Specifications,
+  Expenses,
+  Property,
+} from "./assets/DataTypes";
 import { States, UtilityAndServiceOptions } from "./assets/Data";
 import MultiSelectOptions from "../../components/MultiSelectOptions.vue";
 import { User, getAuth } from "firebase/auth";
-import {
-  Firestore,
-  getFirestore,
-  DocumentReference,
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import database from "../../main";
+import * as firestore from "firebase/firestore";
 
 export default defineComponent({
   name: "CreateListingView",
   components: { MultiSelectOptions },
   data() {
-    const database: Firestore = getFirestore();
     const currentUser: User | null = getAuth().currentUser;
     const states: string[] = States;
     let targetedSchools: string[] = [];
@@ -277,7 +279,6 @@ export default defineComponent({
     };
 
     return {
-      database,
       currentUser,
       primaryPhoto: "",
       states,
@@ -301,9 +302,12 @@ export default defineComponent({
           const state: string = this.address.state.toString();
           const city: string = this.address.city.toString();
           const stateDocPath: string = `SchoolLocations/${state}`.toString();
-          const stateDoc: DocumentReference = doc(this.database, stateDocPath);
+          const stateDoc: firestore.DocumentReference = firestore.doc(
+            database,
+            stateDocPath
+          );
 
-          getDoc(stateDoc).then((docSnapshot) => {
+          firestore.getDoc(stateDoc).then((docSnapshot) => {
             if (docSnapshot.exists()) {
               for (const school in docSnapshot.data()) {
                 if (docSnapshot.data()[school].includes(city)) {
@@ -360,6 +364,38 @@ export default defineComponent({
     getIncludedUS(): string[] {
       return (this.$refs.includedUS as InstanceType<typeof MultiSelectOptions>)
         .selectedOptions;
+    },
+    didClickCreateListingButton(): void {
+      const property: Property = {
+        address: this.address,
+        specifications: this.specifications,
+        expenses: this.expenses,
+        includedUtilitiesAndServices: this.getIncludedUS(),
+        description: this.description,
+      };
+
+      const propertiesColl: firestore.CollectionReference =
+        firestore.collection(database, "Properties");
+
+      firestore
+        // Add property to the Properties collection
+        .addDoc(propertiesColl, property)
+        .then((propertyDoc: firestore.DocumentReference) => {
+          // Build the SchoolProperties document reference for each targeted school
+          this.targetedSchools.forEach((school: string) => {
+            const schoolDocPath: string =
+              `SchoolProperties/${school}`.toString();
+            const schoolDoc: firestore.DocumentReference = firestore.doc(
+              database,
+              schoolDocPath
+            );
+
+            // Add the propertyDoc reference to the targeted school's properties array
+            firestore.updateDoc(schoolDoc, {
+              properties: firestore.arrayUnion(propertyDoc),
+            });
+          });
+        });
     },
   },
 });

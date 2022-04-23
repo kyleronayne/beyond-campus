@@ -17,14 +17,24 @@
     </h1>
     <div id="right-links-container">
       <a class="link">Saved Properties</a>
-      <a id="profile-link" class="link no-hover" v-if="isLoggedIn">
-        <img
-          id="profile-icon"
-          src="../assets/navbar/images/profile-icon.svg"
-          alt="White user profile icon"
-        />
-        <span id="username">{{ getUsername() }}</span>
-      </a>
+      <div id="profile-link-container">
+        <a
+          id="profile-main-link"
+          class="link no-hover"
+          v-on:click="showProfileQuickLinks = !showProfileQuickLinks"
+          v-if="isLoggedIn"
+        >
+          <img
+            id="profile-icon"
+            src="../assets/navbar/images/profile-icon.svg"
+            alt="White user profile icon"
+          />
+          <span id="username">{{ getUsername() }}</span>
+        </a>
+        <div id="profile-quick-links-container" v-show="showProfileQuickLinks">
+          <a class="profile-quick-link">Logout</a>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -38,10 +48,12 @@ export default defineComponent({
   data() {
     let auth: Auth = getAuth();
     let isLoggedIn = false;
+    let showProfileQuickLinks = false;
 
     return {
       auth,
       isLoggedIn,
+      showProfileQuickLinks,
     };
   },
   mounted() {
@@ -101,13 +113,30 @@ export default defineComponent({
   gap: 2rem;
 }
 
-#profile-link {
+#profile-link-container {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+#profile-main-link {
   display: flex;
   align-items: center;
 }
 
 #username {
   padding-left: 0.5rem;
+}
+
+#profile-quick-links-container {
+  z-index: 1;
+  position: absolute;
+  margin-top: 4rem;
+  padding: 1rem 4rem 1rem 1rem;
+  color: black;
+  background-color: white;
+  border: 2px solid var(--theme-color-main);
+  border-radius: 3px;
 }
 
 /* Class Selectors */
@@ -127,5 +156,8 @@ export default defineComponent({
 }
 .link:hover {
   transform: translateY(-5px);
+}
+
+.profile-quick-link {
 }
 </style>

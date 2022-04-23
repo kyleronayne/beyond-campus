@@ -20,4 +20,12 @@ type Expenses = {
   cleaningFee: string;
 };
 
-export { Address, Specifications, Expenses };
+type Property = {
+  address: Address;
+  specifications: Specifications;
+  expenses: Expenses;
+  includedUtilitiesAndServices: string[];
+  description: string;
+};
+
+export { Address, Specifications, Expenses, Property };
