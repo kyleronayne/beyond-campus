@@ -19,8 +19,8 @@
           v-bind:to="{ path: '/signup', name: 'SignupView' }"
         ></router-link>
       </button>
-      <button @click="withEmail">Login</button>
-      <button @click="withGMail">Sign in with Google</button>
+      <button @click="loginWithEmail">Login</button>
+      <button @click="loginWithGMail">Sign in with Google</button>
     </div>
   </div>
 </template>
@@ -32,9 +32,11 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   UserCredential,
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import database from "../main";
+import { collection, doc, setDoc } from "firebase/firestore";
+import db from "../main";
 export default defineComponent({
   name: "LoginView",
   data() {
@@ -42,7 +44,7 @@ export default defineComponent({
       u_pass: "",
       u_email: "",
       auth: getAuth(),
-      db: database,
+      db: db,
     };
   },
   methods: {
@@ -50,22 +52,23 @@ export default defineComponent({
       this.$router.push({ path: "/signup" });
     },
 
-    withEmail(): void {
+    loginWithEmail(): void {
       signInWithEmailAndPassword(this.auth!, this.u_email, this.u_pass)
         .then((cr: UserCredential) => {
-          this.$router.push({ path: "/" });
+          this.$router.push({ path: "/landing", name: "LandingView" });
         })
         .catch((err: any) => {
           alert(`Unable to login ${err}`);
         });
     },
 
-    withGMail(): void {
+    loginwithGMail(): void {
       const provider = new GoogleAuthProvider();
       signInWithPopup(this.auth, provider).then((cred: UserCredential) => {
         console.log("Yes, logged in");
+
         // Move to the home page
-        this.$router.push({ path: "/" });
+        this.$router.push({ path: "/landing", name: "LandingView" });
       });
     },
   },

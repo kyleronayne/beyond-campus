@@ -13,7 +13,7 @@
             >
               <img
                 id="primary-photo-upload-icon"
-                src="../create-listing-view/assets/upload-icon.svg"
+                src="/create-listing-view/assets/upload-icon.svg"
                 v-show="!primaryPhoto"
                 alt="Grey upload icon"
               />
