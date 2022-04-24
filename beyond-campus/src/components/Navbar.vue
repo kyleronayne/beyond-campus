@@ -32,7 +32,7 @@
           <span id="username">{{ getUsername() }}</span>
         </a>
         <div id="profile-quick-links-container" v-show="showProfileQuickLinks">
-          <a class="profile-quick-link">Logout</a>
+          <a class="profile-quick-link" v-on:click="gone">Logout</a>
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { Auth, getAuth, onAuthStateChanged } from "firebase/auth";
+import { Auth, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 export default defineComponent({
   name: "NavBar",
@@ -71,6 +71,15 @@ export default defineComponent({
       } else {
         return "";
       }
+    },
+    /**
+     * Logs the user out of the application
+     */
+    gone(): void {
+      console.log("logout Clicked");
+      if (this.auth) signOut(this.auth);
+
+      this.$router.push({ path: "/", name: "LoginView" });
     },
   },
 });
@@ -159,5 +168,8 @@ export default defineComponent({
 }
 
 .profile-quick-link {
+  position: absolute;
+  z-index: 200;
+  cursor: pointer;
 }
 </style>
