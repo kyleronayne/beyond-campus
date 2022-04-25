@@ -11,7 +11,7 @@
     <h1 id="title">
       <router-link
         id="landing-link"
-        v-bind:to="{ path: '/', name: 'LandingView' }"
+        v-bind:to="{ path: '/landing', name: 'LandingView' }"
         >Beyond Campus</router-link
       >
     </h1>
