@@ -100,11 +100,16 @@ import {
   DocumentReference,
   setDoc,
 } from "firebase/firestore";
+import { ref, getStorage, uploadBytes } from "firebase/storage";
+import firebase from "firebase/app";
+import { storage } from "@/main";
 
 export default defineComponent({
   name: "SignupView",
   data() {
     let valid = false;
+    const store = storage;
+    const photoFile: File | null = null;
     return {
       firstName: "",
       lastName: "",
@@ -116,6 +121,8 @@ export default defineComponent({
       valid: valid,
       schoolName: "",
       phoneNumber: "",
+      store,
+      photoFile,
     };
   },
   methods: {
@@ -143,6 +150,7 @@ export default defineComponent({
               lastName: this.lastName,
               school: this.schoolName,
               phone: this.phoneNumber,
+              profileRef: this.primaryPhoto,
             }).then(() => {
               console.log(
                 `New Doc added with id ${cr.user.uid} and name ${this.firstName}`
@@ -177,6 +185,12 @@ export default defineComponent({
           file.type == "image/png"
         ) {
           this.primaryPhoto = URL.createObjectURL(file);
+          const storeRef = ref(this.store, file.name);
+          uploadBytes(storeRef, file).then((snapshot) => {
+            console.log(
+              `Uploaded file to storage ${file.name} for file: ${file}`
+            );
+          });
         }
       }
     },
