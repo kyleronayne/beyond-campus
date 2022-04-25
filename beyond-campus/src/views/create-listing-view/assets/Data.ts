@@ -51,6 +51,8 @@ const States: string[] = [
   "WY",
 ];
 
+const PropertyTypes: string[] = ["House", "Townhome", "Apartment"];
+
 const UtilityAndServiceOptions: string[] = [
   "Electricity",
   "Gas",
@@ -63,4 +65,4 @@ const UtilityAndServiceOptions: string[] = [
   "Cable",
 ];
 
-export { States, UtilityAndServiceOptions };
+export { States, PropertyTypes, UtilityAndServiceOptions };

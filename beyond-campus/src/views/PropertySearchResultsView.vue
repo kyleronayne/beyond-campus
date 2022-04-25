@@ -1,5 +1,5 @@
 <template>
-  <div class="property-search-results">
+  <div id="property-search-results-view">
     <FilterBar v-bind:propertyType="propertyType"></FilterBar>
   </div>
 </template>
@@ -10,13 +10,25 @@ import FilterBar from "../components/FilterBar.vue";
 import { useRoute } from "vue-router";
 
 export default defineComponent({
+  name: "PropertySearchResultsView",
   components: { FilterBar },
   data() {
     const route = useRoute();
+    const school: string = route.params.school.toString();
+    const propertyType: string = route.params.propertyType.toString();
+
     return {
-      school: route.params.school,
-      propertyType: route.params.propertyType,
+      school,
+      propertyType,
     };
+  },
+  mounted() {
+    this.getProperties();
+  },
+  methods: {
+    getProperties() {
+      console.log("Getting Properties");
+    },
   },
 });
 </script>

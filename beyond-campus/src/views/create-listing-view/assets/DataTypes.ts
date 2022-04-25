@@ -7,6 +7,7 @@ type Address = {
 };
 
 type Specifications = {
+  type: string;
   squareFootage: string;
   numFloors: string;
   numBedrooms: string;

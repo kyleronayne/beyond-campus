@@ -85,6 +85,10 @@
   width: 10rem;
 }
 
+#property-type {
+  width: 7rem;
+}
+
 #state,
 #num-floors,
 #num-bedrooms,

@@ -103,6 +103,23 @@
           <!-- Specifications Section -->
           <section class="section">
             <h2 class="section__heading">Specifications</h2>
+            <div class="section__item">
+              <label class="item__label" for="property-type"
+                >Property Type</label
+              >
+              <select
+                id="property-type"
+                class="item__select"
+                v-model="specifications.type"
+              >
+                <option
+                  v-for="(propertyType, index) in propertyTypes"
+                  v-bind:key="index"
+                >
+                  {{ propertyType }}
+                </option>
+              </select>
+            </div>
             <div class="section__multi-item-container">
               <div class="section__item">
                 <label class="item__label" for="square-footage"
@@ -245,7 +262,7 @@ import {
   Expenses,
   Property,
 } from "./assets/DataTypes";
-import { States, UtilityAndServiceOptions } from "./assets/Data";
+import { States, PropertyTypes, UtilityAndServiceOptions } from "./assets/Data";
 import MultiSelectOptions from "../../components/MultiSelectOptions.vue";
 import { User, getAuth } from "firebase/auth";
 import database from "../../main";
@@ -265,7 +282,9 @@ export default defineComponent({
       zipCode: "",
       aptUnitNum: "",
     };
+    const propertyTypes: string[] = PropertyTypes;
     let specifications: Specifications = {
+      type: "",
       squareFootage: "",
       numFloors: "",
       numBedrooms: "",
@@ -283,6 +302,7 @@ export default defineComponent({
       primaryPhoto: "",
       states,
       address,
+      propertyTypes,
       targetedSchools,
       specifications,
       expenses,
@@ -401,6 +421,4 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-@import "../create-listing-view/CreateListingView.css";
-</style>
+<style scoped src="../create-listing-view/CreateListingView.css"></style>
