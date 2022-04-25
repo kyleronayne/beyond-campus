@@ -109,7 +109,7 @@ export default defineComponent({
   data() {
     let valid = false;
     const store = storage;
-    const photoFile: File | null = null;
+    let photoFile: File | null = null;
     return {
       firstName: "",
       lastName: "",
@@ -123,6 +123,7 @@ export default defineComponent({
       phoneNumber: "",
       store,
       photoFile,
+      uid: "",
     };
   },
   methods: {
@@ -150,7 +151,7 @@ export default defineComponent({
               lastName: this.lastName,
               school: this.schoolName,
               phone: this.phoneNumber,
-              profileRef: this.primaryPhoto,
+              profileRef: `${cr.user.uid}-profilePic`,
             }).then(() => {
               console.log(
                 `New Doc added with id ${cr.user.uid} and name ${this.firstName}`
@@ -161,8 +162,10 @@ export default defineComponent({
               `Users/${cr.user.uid}/savedProperties`
             );
             addDoc(addingSavedProperties, { reference: "" });
+            this.uploadImageFile(cr.user.uid);
             this.$router.push({ path: "/" });
           })
+
           .catch((err: any) => {
             alert(`Unable to create account ${err}`);
           });
@@ -178,6 +181,7 @@ export default defineComponent({
     },
     didUploadPrimaryPhoto(event: { target: { files: any[] } }): void {
       const file = event.target.files[0];
+      this.photoFile = file;
       if (file) {
         if (
           file.type == "image/jpeg" ||
@@ -185,12 +189,6 @@ export default defineComponent({
           file.type == "image/png"
         ) {
           this.primaryPhoto = URL.createObjectURL(file);
-          const storeRef = ref(this.store, file.name);
-          uploadBytes(storeRef, file).then((snapshot) => {
-            console.log(
-              `Uploaded file to storage ${file.name} for file: ${file}`
-            );
-          });
         }
       }
     },
@@ -208,6 +206,14 @@ export default defineComponent({
       this.email = "";
       this.pass = "";
       this.confirmPassword = "";
+    },
+    uploadImageFile(uid: string): void {
+      const storeRef = ref(this.store, `${uid}-profilePic`);
+      uploadBytes(storeRef, this.photoFile!).then((snapshot) => {
+        console.log(
+          `Uploaded file to storage under ${uid}-profile for file: ${this.photoFile}`
+        );
+      });
     },
   },
   computed: {
