@@ -161,7 +161,7 @@ export default defineComponent({
               `Users/${cr.user.uid}/savedProperties`
             );
             addDoc(addingSavedProperties, { reference: "" });
-            this.$router.push({ path: "/landing" });
+            this.$router.push({ path: "/" });
           })
           .catch((err: any) => {
             alert(`Unable to create account ${err}`);

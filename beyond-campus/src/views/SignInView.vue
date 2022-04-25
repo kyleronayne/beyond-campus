@@ -55,7 +55,7 @@ export default defineComponent({
     loginWithEmail(): void {
       signInWithEmailAndPassword(this.auth!, this.u_email, this.u_pass)
         .then((cr: UserCredential) => {
-          this.$router.push({ path: "/landing", name: "LandingView" });
+          this.$router.push({ path: "/", name: "LandingView" });
         })
         .catch((err: any) => {
           alert(`Unable to login ${err}`);

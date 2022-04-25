@@ -13,7 +13,7 @@ const routes: Array<RouteRecordRaw> = [
     component: SignInView,
   },
   {
-    path: "/landing",
+    path: "/",
     name: "LandingView",
     component: LandingView,
   },
@@ -38,7 +38,7 @@ const routes: Array<RouteRecordRaw> = [
         if (user) {
           next(true);
         } else {
-          next({ path: "/login" });
+          next({ path: "/sign-in" });
         }
       });
     },
