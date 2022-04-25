@@ -14,13 +14,13 @@
               <img
                 id="primary-photo-upload-icon"
                 src="../create-listing-view/assets/upload-icon.svg"
-                v-show="!primaryPhoto"
+                v-show="!primaryPhotoLocalFile"
                 alt="Grey upload icon"
               />
               <img
                 id="primary-photo-preview"
-                v-bind:src="primaryPhoto"
-                v-show="primaryPhoto"
+                v-bind:src="primaryPhotoLocalFile"
+                v-show="primaryPhotoLocalFile"
                 alt="Listing primary photo preview"
               />
               <input
@@ -32,7 +32,7 @@
             <button
               id="remove-primary-photo-button"
               v-on:click.prevent="didClickRemovePrimaryPhotoButton"
-              v-show="primaryPhoto"
+              v-show="primaryPhotoLocalFile"
             >
               Remove Photo
             </button>
@@ -265,8 +265,10 @@ import {
 import { States, PropertyTypes, UtilityAndServiceOptions } from "./assets/Data";
 import MultiSelectOptions from "../../components/MultiSelectOptions.vue";
 import { User, getAuth } from "firebase/auth";
-import database from "../../main";
+import { v4 as uuid } from "uuid";
 import * as firestore from "firebase/firestore";
+import * as firebaseStorage from "firebase/storage";
+import database from "@/main";
 
 export default defineComponent({
   name: "CreateListingView",
@@ -299,7 +301,9 @@ export default defineComponent({
 
     return {
       currentUser,
-      primaryPhoto: "",
+      primaryPhotoLocalFile: "",
+      primaryPhotoRemoteFile: null,
+      primaryPhotoUUID: "",
       states,
       address,
       propertyTypes,
@@ -347,7 +351,7 @@ export default defineComponent({
      * Clicks the primary photo input to open the file selector
      */
     didClickPrimaryPhotoInputContainer(): void {
-      if (!this.primaryPhoto) {
+      if (!this.primaryPhotoLocalFile) {
         // If the user has not selected a primary photo
         document.getElementById("primary-photo-input")?.click();
       }
@@ -363,7 +367,8 @@ export default defineComponent({
           file.type == "image/jpg" ||
           file.type == "image/png"
         ) {
-          this.primaryPhoto = URL.createObjectURL(file);
+          this.primaryPhotoLocalFile = URL.createObjectURL(file);
+          this.primaryPhotoRemoteFile = file;
         }
       }
     },
@@ -376,7 +381,8 @@ export default defineComponent({
         "primary-photo-input"
       ) as HTMLInputElement;
       primaryPhotoInput.value = "";
-      this.primaryPhoto = "";
+      this.primaryPhotoLocalFile = "";
+      this.primaryPhotoRemoteFile = null;
     },
     /**
      * Returns the selected included utilities and services
@@ -385,8 +391,20 @@ export default defineComponent({
       return (this.$refs.includedUS as InstanceType<typeof MultiSelectOptions>)
         .selectedOptions;
     },
+    uploadPrimaryPhoto(): void {
+      this.primaryPhotoUUID = uuid();
+      const storageRef = firebaseStorage.ref(
+        firebaseStorage.getStorage(),
+        `primary-property-photos/${this.primaryPhotoUUID}`
+      );
+
+      firebaseStorage.uploadBytes(storageRef, this.primaryPhotoRemoteFile!);
+    },
     didClickCreateListingButton(): void {
+      this.uploadPrimaryPhoto();
+
       const property: Property = {
+        primaryPhotoUUID: this.primaryPhotoUUID,
         address: this.address,
         specifications: this.specifications,
         expenses: this.expenses,

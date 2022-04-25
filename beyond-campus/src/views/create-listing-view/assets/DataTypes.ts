@@ -22,6 +22,7 @@ type Expenses = {
 };
 
 type Property = {
+  primaryPhotoUUID: string;
   address: Address;
   specifications: Specifications;
   expenses: Expenses;
