@@ -62,7 +62,7 @@ export default defineComponent({
         });
     },
 
-    loginwithGMail(): void {
+    loginWithGMail(): void {
       const provider = new GoogleAuthProvider();
       signInWithPopup(this.auth, provider).then((cred: UserCredential) => {
         console.log("Yes, logged in");
