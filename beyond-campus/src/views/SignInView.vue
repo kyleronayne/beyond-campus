@@ -16,7 +16,7 @@
       <button @click="createAccount">
         Signup
         <router-link
-          v-bind:to="{ path: '/signup', name: 'SignupView' }"
+          v-bind:to="{ path: '/sign-up', name: 'SignUpView' }"
         ></router-link>
       </button>
       <button @click="loginWithEmail">Login</button>
@@ -38,7 +38,7 @@ import {
 import { collection, doc, setDoc } from "firebase/firestore";
 import db from "../main";
 export default defineComponent({
-  name: "LoginView",
+  name: "SignInView",
   data() {
     return {
       u_pass: "",
@@ -49,7 +49,7 @@ export default defineComponent({
   },
   methods: {
     createAccount(): void {
-      this.$router.push({ path: "/signup" });
+      this.$router.push({ path: "/sign-up" });
     },
 
     loginWithEmail(): void {
@@ -78,7 +78,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 #loginpanel {
   position: fixed;
   left: 40%;

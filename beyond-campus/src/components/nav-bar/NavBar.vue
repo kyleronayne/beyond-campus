@@ -17,8 +17,8 @@
     </h1>
     <div id="right-links-container">
       <a class="link">Saved Properties</a>
-      <div id="profile-link-container">
-        <a id="profile-main-link" class="link no-hover" v-if="isLoggedIn">
+      <div id="profile-link-container" v-if="isLoggedIn">
+        <a id="profile-main-link" class="link no-hover">
           <img
             id="profile-icon"
             src="../nav-bar/assets/profile-icon.svg"
@@ -27,10 +27,18 @@
           <span id="username">{{ getUsername() }}</span>
         </a>
         <div id="profile-quick-links-container">
-          <a class="profile-quick-link" v-on:click="didClickLogout">Logout</a>
+          <a class="profile-quick-link" v-on:click="didClickSignOut"
+            >Sign Out</a
+          >
           <a class="profile-quick-link">Manage Properties</a>
         </div>
       </div>
+      <router-link
+        class="link"
+        v-else
+        v-bind:to="{ path: '/sign-in', name: 'SignInView' }"
+        >Sign In</router-link
+      >
     </div>
   </div>
 </template>
@@ -69,12 +77,11 @@ export default defineComponent({
       }
     },
     /**
-     * Logs the user out of their account
+     * Signs the user out of their account
      */
-    didClickLogout(): void {
+    didClickSignOut(): void {
       if (this.auth) {
         signOut(this.auth);
-        this.$router.push({ path: "/", name: "LoginView" });
       }
     },
   },

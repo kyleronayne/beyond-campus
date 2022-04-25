@@ -105,7 +105,7 @@ import firebase from "firebase/app";
 import { storage } from "@/main";
 
 export default defineComponent({
-  name: "SignupView",
+  name: "SignUpView",
   data() {
     let valid = false;
     const store = storage;
@@ -225,7 +225,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 #signupPanel {
   border: 10px solid black;
 }

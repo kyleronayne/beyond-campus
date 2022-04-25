@@ -1,16 +1,16 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import LandingView from "../views/LandingView.vue";
-import LoginView from "../views/LoginView.vue";
-import SignupView from "../views/signup-view/SignupView.vue";
+import SignInView from "../views/SignInView.vue";
+import SignUpView from "../views/sign-up-view/SignUpView.vue";
 import PropertySearchResultsView from "../views/PropertySearchResultsView.vue";
 import CreateListingView from "../views/create-listing-view/CreateListingView.vue";
 import { Auth, getAuth, onAuthStateChanged } from "firebase/auth";
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: "/",
-    name: "LoginView",
-    component: LoginView,
+    path: "/sign-in",
+    name: "SignInView",
+    component: SignInView,
   },
   {
     path: "/landing",
@@ -18,9 +18,9 @@ const routes: Array<RouteRecordRaw> = [
     component: LandingView,
   },
   {
-    path: "/signup",
-    name: "SignupView",
-    component: SignupView,
+    path: "/sign-up",
+    name: "SignUpView",
+    component: SignUpView,
   },
   {
     path: "/property-search-results",
