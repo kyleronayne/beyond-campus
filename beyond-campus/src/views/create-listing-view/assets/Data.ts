@@ -51,7 +51,12 @@ const States: string[] = [
   "WY",
 ];
 
-const PropertyTypes: string[] = ["House", "Townhome", "Apartment"];
+const PropertyTypes: string[] = [
+  "Single Unit House",
+  "Duplex",
+  "Townhome",
+  "Apartment",
+];
 
 const UtilityAndServiceOptions: string[] = [
   "Electricity",

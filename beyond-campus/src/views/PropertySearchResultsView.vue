@@ -14,7 +14,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import FilterBar from "../components/FilterBar.vue";
-import PropertyCard from "../components/PropertyCard.vue";
+import PropertyCard from "../components/property-card/PropertyCard.vue";
 import { useRoute } from "vue-router";
 import database from "../main";
 import * as firestore from "firebase/firestore";
