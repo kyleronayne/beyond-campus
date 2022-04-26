@@ -1,3 +1,5 @@
+import { StorageReference } from "firebase/storage";
+
 type Address = {
   street: string;
   city: string;
@@ -22,7 +24,7 @@ type Expenses = {
 };
 
 type Property = {
-  primaryPhotoUUID: string;
+  primaryPhotoRef: string;
   address: Address;
   specifications: Specifications;
   expenses: Expenses;

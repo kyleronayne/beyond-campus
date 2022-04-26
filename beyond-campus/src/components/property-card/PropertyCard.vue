@@ -76,11 +76,11 @@ export default defineComponent({
     getPrimaryPropertyPhoto() {
       const primaryPhotoRef = FirebaseStorage.ref(
         FirebaseStorage.getStorage(),
-        `primary-property-photos/${this.$props.property!.primaryPhotoUUID}`
+        this.$props.property!.primaryPhotoRef
       );
+
       FirebaseStorage.getDownloadURL(primaryPhotoRef).then(
         (primaryPhotoURL: string) => {
-          console.log(primaryPhotoURL);
           this.primaryPhotoURL = primaryPhotoURL;
         }
       );

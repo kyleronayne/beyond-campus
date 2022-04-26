@@ -391,20 +391,22 @@ export default defineComponent({
       return (this.$refs.includedUS as InstanceType<typeof MultiSelectOptions>)
         .selectedOptions;
     },
-    uploadPrimaryPhoto(): void {
-      this.primaryPhotoUUID = uuid();
-      const storageRef = firebaseStorage.ref(
+    didClickCreateListingButton(): void {
+      const primaryPhotoStoragePath = `primary-property-photos/${uuid()}`;
+      const primaryPhotoStorage = firebaseStorage.ref(
         firebaseStorage.getStorage(),
-        `primary-property-photos/${this.primaryPhotoUUID}`
+        primaryPhotoStoragePath
       );
 
-      firebaseStorage.uploadBytes(storageRef, this.primaryPhotoRemoteFile!);
-    },
-    didClickCreateListingButton(): void {
-      this.uploadPrimaryPhoto();
+      // Add primary photo to the primary-property-photos folder
+      firebaseStorage.uploadBytes(
+        primaryPhotoStorage,
+        this.primaryPhotoRemoteFile!
+      );
 
+      // Create property object
       const property: Property = {
-        primaryPhotoUUID: this.primaryPhotoUUID,
+        primaryPhotoRef: primaryPhotoStorage.fullPath,
         address: this.address,
         specifications: this.specifications,
         expenses: this.expenses,
@@ -419,19 +421,27 @@ export default defineComponent({
         // Add property to the Properties collection
         .addDoc(propertiesColl, property)
         .then((propertyDoc: firestore.DocumentReference) => {
-          // Build the SchoolProperties document reference for each targeted school
+          // Insert the property into the propertyRefs array of the appropriate SchoolProperties documents
           this.targetedSchools.forEach((school: string) => {
-            const schoolDocPath: string =
-              `SchoolProperties/${school}`.toString();
+            const schoolPropertiesDocPath = `SchoolProperties/${school}`;
             const schoolDoc: firestore.DocumentReference = firestore.doc(
               database,
-              schoolDocPath
+              schoolPropertiesDocPath
             );
 
-            // Add the propertyDoc reference to the targeted school's properties array
             firestore.updateDoc(schoolDoc, {
-              properties: firestore.arrayUnion(propertyDoc),
+              propertyRefs: firestore.arrayUnion(propertyDoc),
             });
+          });
+
+          // Insert the property into the ownedPropertyRefs array of the appropriate User document
+          const userDocPath = `Users/${this.currentUser!.uid}`;
+          const userDoc: firestore.DocumentReference = firestore.doc(
+            database,
+            userDocPath
+          );
+          firestore.updateDoc(userDoc, {
+            ownedPropertyRefs: firestore.arrayUnion(propertyDoc),
           });
         });
     },

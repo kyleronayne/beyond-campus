@@ -39,28 +39,28 @@ export default defineComponent({
   },
   methods: {
     getProperties() {
-      // SchoolProperties school document for the user-selected school
-      const schoolPropertiesDoc: firestore.DocumentReference = firestore.doc(
+      // User-selected school document from the SchoolProperties collection
+      const schoolDoc: firestore.DocumentReference = firestore.doc(
         database,
         `SchoolProperties/${this.school}`
       );
 
       firestore
-        .getDoc(schoolPropertiesDoc)
+        .getDoc(schoolDoc)
         .then((docSnapshot: firestore.DocumentSnapshot) => {
           if (docSnapshot.exists()) {
             // If the school document exists
             docSnapshot
               .data()
-              .properties.forEach(
+              .propertyRefs.forEach(
                 (propertyDocument: firestore.DocumentReference) => {
-                  // Get each property document for the school
+                  // Get each property document targeted for the school
                   firestore.getDoc(propertyDocument).then((docSnapshot) => {
                     if (docSnapshot.exists()) {
-                      const docData: firestore.DocumentData =
+                      const propertyDocData: firestore.DocumentData =
                         docSnapshot.data();
 
-                      this.properties.push(docData);
+                      this.properties.push(propertyDocData);
                     }
                   });
                 }
