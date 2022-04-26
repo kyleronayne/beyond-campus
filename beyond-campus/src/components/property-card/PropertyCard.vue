@@ -43,6 +43,17 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import * as FirebaseStorage from "firebase/storage";
+import { Auth, getAuth, User } from "@firebase/auth";
+import {
+  CollectionReference,
+  collection,
+  addDoc,
+  DocumentReference,
+  doc,
+  setDoc,
+  deleteDoc,
+} from "@firebase/firestore";
+import database from "@/main";
 
 export default defineComponent({
   name: "PropertyCard",
@@ -57,6 +68,7 @@ export default defineComponent({
     const numBathroomsString = `Baths: ${
       this.$props.property!.specifications.numBathrooms
     } `;
+    const cUser: User | null = getAuth().currentUser;
     let saveIcon = "./assets/save-icon-hollow.svg";
     let isPropertySaved = false;
 
@@ -67,6 +79,7 @@ export default defineComponent({
       numBathroomsString,
       saveIcon,
       isPropertySaved,
+      cUser,
     };
   },
   mounted() {
@@ -90,8 +103,22 @@ export default defineComponent({
 
       if (this.isPropertySaved) {
         this.saveIcon = "./assets/save-icon-filled.svg";
+        const docRef: DocumentReference = doc(
+          database,
+          `Users/${this.cUser?.uid}/savedProperties/${
+            this.$props.property!.primaryPhotoUUID
+          }`
+        );
+        setDoc(docRef, { numBeds: this.numBedsString });
       } else {
         this.saveIcon = "./assets/save-icon-hollow.svg";
+        const docRef: DocumentReference = doc(
+          database,
+          `Users/${this.cUser?.uid}/savedProperties/${
+            this.$props.property!.primaryPhotoUUID
+          }`
+        );
+        deleteDoc(docRef);
       }
     },
   },
