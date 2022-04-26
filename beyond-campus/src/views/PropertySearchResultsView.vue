@@ -3,9 +3,10 @@
     <FilterBar v-bind:propertyType="propertyType"></FilterBar>
     <div id="property-search-results">
       <PropertyCard
-        v-for="(property, index) in properties"
+        v-for="(propertyData, index) in propertyDocData"
         v-bind:key="index"
-        v-bind:property="property"
+        v-bind:propertyID="propertyDocIDs[index]"
+        v-bind:propertyData="propertyData"
       ></PropertyCard>
     </div>
   </div>
@@ -26,12 +27,14 @@ export default defineComponent({
     const route = useRoute();
     const school: string = route.params.school.toString();
     const propertyType: string = route.params.propertyType.toString();
-    let properties: firestore.DocumentData[] = [];
+    let propertyDocData: firestore.DocumentData[] = [];
+    let propertyDocIDs: string[] = [];
 
     return {
       school,
       propertyType,
-      properties,
+      propertyDocData,
+      propertyDocIDs,
     };
   },
   mounted() {
@@ -53,14 +56,14 @@ export default defineComponent({
             docSnapshot
               .data()
               .propertyRefs.forEach(
-                (propertyDocument: firestore.DocumentReference) => {
+                (propertyDoc: firestore.DocumentReference) => {
                   // Get each property document targeted for the school
-                  firestore.getDoc(propertyDocument).then((docSnapshot) => {
+                  firestore.getDoc(propertyDoc).then((docSnapshot) => {
                     if (docSnapshot.exists()) {
-                      const propertyDocData: firestore.DocumentData =
-                        docSnapshot.data();
-
-                      this.properties.push(propertyDocData);
+                      // Add the property data to the propertyDocData array
+                      this.propertyDocData.push(docSnapshot.data());
+                      // Add the property ID to the propertyDocIDs array
+                      this.propertyDocIDs.push(propertyDoc.id);
                     }
                   });
                 }

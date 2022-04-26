@@ -5,7 +5,10 @@
       <img
         class="property-card__save-icon"
         v-bind:src="require(`${saveIcon}`)"
-        v-on:click="toggleSaveIcon"
+        v-on:click="
+          toggleSaveIcon();
+          saveProperty();
+        "
       />
     </div>
     <div class="property-card__main-details">
@@ -16,23 +19,27 @@
           numBathroomsString
         }}</span>
       </div>
-      <span class="main-details__type">{{ property.specifications.type }}</span>
+      <span class="main-details__type">{{
+        propertyData.specifications.type
+      }}</span>
     </div>
     <div class="property-card__address">
       <img src="./assets/address-icon.svg" alt="" class="address__icon" />
       <div class="address__column-container">
         <div class="address__row-container">
-          <span class="address__street">{{ property.address.street }}</span>
-          <span
-            class="address__aptUnitNum"
-            v-if="property.address.aptUnitNum"
-            >{{ " " + property.address.aptUnitNum }}</span
-          >
+          <span class="address__street">{{ propertyData.address.street }}</span>
+          <span class="address__aptUnitNum">{{
+            propertyData.address.aptUnitNum
+          }}</span>
         </div>
         <div class="address__row-container">
-          <span class="address__city">{{ property.address.city + ", " }}</span>
-          <span class="address__state">{{ property.address.state + " " }}</span>
-          <span class="address__zipCode">{{ property.address.zipCode }}</span>
+          <span class="address__city">{{
+            propertyData.address.city + ", "
+          }}</span>
+          <span class="address__state">{{ propertyData.address.state }}</span>
+          <span class="address__zipCode">{{
+            propertyData.address.zipCode
+          }}</span>
         </div>
       </div>
     </div>
@@ -43,82 +50,111 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import * as FirebaseStorage from "firebase/storage";
-import { Auth, getAuth, User } from "@firebase/auth";
-import {
-  CollectionReference,
-  collection,
-  addDoc,
-  DocumentReference,
-  doc,
-  setDoc,
-  deleteDoc,
-} from "@firebase/firestore";
+import { Auth, getAuth } from "firebase/auth";
+import * as Firestore from "firebase/firestore";
 import database from "@/main";
 
 export default defineComponent({
   name: "PropertyCard",
-  props: {
-    property: Object,
-  },
+  props: ["propertyID", "propertyData"],
   data() {
-    const rentString = `$${this.$props.property!.expenses.rent}/month | `;
-    const numBedsString = `Beds: ${
-      this.$props.property!.specifications.numBedrooms
-    }, `;
-    const numBathroomsString = `Baths: ${
-      this.$props.property!.specifications.numBathrooms
-    } `;
-    const cUser: User | null = getAuth().currentUser;
     let saveIcon = "./assets/save-icon-hollow.svg";
     let isPropertySaved = false;
+    let currentUser: Auth | null;
+    const rentString = `$${this.$props.propertyData!.expenses.rent}/month | `;
+    const numBedsString = `Beds: ${
+      this.$props.propertyData!.specifications.numBedrooms
+    }, `;
+    const numBathroomsString = `Baths: ${
+      this.$props.propertyData!.specifications.numBathrooms
+    } `;
 
     return {
       primaryPhotoURL: "",
+      saveIcon,
+      isPropertySaved,
+      currentUser: getAuth().currentUser,
       rentString,
       numBedsString,
       numBathroomsString,
-      saveIcon,
-      isPropertySaved,
-      cUser,
     };
   },
   mounted() {
     this.getPrimaryPropertyPhoto();
+    this.isPreviouslySaved();
   },
   methods: {
-    getPrimaryPropertyPhoto() {
-      const primaryPhotoRef = FirebaseStorage.ref(
+    getPrimaryPropertyPhoto(): void {
+      const primaryPhotoStorage = FirebaseStorage.ref(
         FirebaseStorage.getStorage(),
-        this.$props.property!.primaryPhotoRef
+        this.$props.propertyData!.primaryPhotoRef
       );
 
-      FirebaseStorage.getDownloadURL(primaryPhotoRef).then(
+      FirebaseStorage.getDownloadURL(primaryPhotoStorage).then(
         (primaryPhotoURL: string) => {
           this.primaryPhotoURL = primaryPhotoURL;
         }
       );
     },
-    toggleSaveIcon() {
-      this.isPropertySaved = !this.isPropertySaved;
+    isPreviouslySaved(): void {
+      if (this.currentUser) {
+        // If the user is signed in to an account
+        const userDocPath = `Users/${this.currentUser!.uid}`;
+        const userDoc: Firestore.DocumentReference = Firestore.doc(
+          database,
+          userDocPath
+        );
+        const propertyDocPath = `Properties/${this.propertyID}`;
 
-      if (this.isPropertySaved) {
-        this.saveIcon = "./assets/save-icon-filled.svg";
-        const docRef: DocumentReference = doc(
-          database,
-          `Users/${this.cUser?.uid}/savedProperties/${
-            this.$props.property!.primaryPhotoUUID
-          }`
+        Firestore.getDoc(userDoc).then(
+          (docSnapshot: Firestore.DocumentSnapshot) => {
+            if (docSnapshot.exists()) {
+              if (
+                docSnapshot.data().savedPropertyRefs.includes(propertyDocPath)
+              ) {
+                // If the property doc ref is in the user's savedPropertyRefs array
+                this.toggleSaveIcon();
+              }
+            }
+          }
         );
-        setDoc(docRef, { numBeds: this.numBedsString });
+      }
+    },
+    toggleSaveIcon(): void {
+      if (this.currentUser) {
+        // If the user is signed in to an account
+        this.isPropertySaved = !this.isPropertySaved;
+
+        if (this.isPropertySaved) {
+          this.saveIcon = "./assets/save-icon-filled.svg";
+        } else {
+          this.saveIcon = "./assets/save-icon-hollow.svg";
+        }
       } else {
-        this.saveIcon = "./assets/save-icon-hollow.svg";
-        const docRef: DocumentReference = doc(
+        // Display message to sign in before saving a property
+      }
+    },
+    saveProperty(): void {
+      if (this.currentUser) {
+        // If the user is signed in to an account
+        const userDocPath = `Users/${this.currentUser!.uid}`;
+        const userDoc: Firestore.DocumentReference = Firestore.doc(
           database,
-          `Users/${this.cUser?.uid}/savedProperties/${
-            this.$props.property!.primaryPhotoUUID
-          }`
+          userDocPath
         );
-        deleteDoc(docRef);
+        const propertyDocPath = `Properties/${this.propertyID}`;
+
+        if (this.isPropertySaved) {
+          // Add the property doc reference to the user's savedPropertyRefs array
+          Firestore.updateDoc(userDoc, {
+            savedPropertyRefs: Firestore.arrayUnion(propertyDocPath),
+          });
+        } else {
+          // Remove the property doc reference from the user's savedPropertyRefs array
+          Firestore.updateDoc(userDoc, {
+            savedPropertyRefs: Firestore.arrayRemove(propertyDocPath),
+          });
+        }
       }
     },
   },
