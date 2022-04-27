@@ -286,15 +286,50 @@ export default defineComponent({
 }
 
 #primary-photo-input-container {
-  width: 30% !important;
+  /* width: 30% !important;
   height: 40% !important;
   margin-top: 25px;
-  margin-left: 29px;
+  margin-left: 29px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 8rem;
+  width: 9rem;
+  margin-bottom: 1rem;
+  margin-left: 8px;
+  border: 2px dashed #d3d3d3;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#primary-photo-input {
+  position: fixed;
+  bottom: 3.9rem;
+  left: 28rem;
 }
 
 #primary-photo-upload-icon {
+  position: relative;
+  left: 3.7rem;
   height: 30px;
 }
+
+#primary-photo-preview {
+  height: 7rem;
+  width: 7rem;
+}
+
+/* #primary-photo-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25rem;
+  width: 35rem;
+  margin-bottom: 1rem;
+  border: 2px dashed #d3d3d3;
+  border-radius: 8px;
+  cursor: pointer;
+} */
 
 #information input {
   margin-left: 25px;
