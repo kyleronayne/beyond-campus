@@ -143,16 +143,20 @@ export default defineComponent({
           userDocPath
         );
         const propertyDocPath = `Properties/${this.propertyID}`;
+        const propertyDoc: Firestore.DocumentReference = Firestore.doc(
+          database,
+          propertyDocPath
+        );
 
         if (this.isPropertySaved) {
           // Add the property doc reference to the user's savedPropertyRefs array
           Firestore.updateDoc(userDoc, {
-            savedPropertyRefs: Firestore.arrayUnion(propertyDocPath),
+            savedPropertyRefs: Firestore.arrayUnion(propertyDoc),
           });
         } else {
           // Remove the property doc reference from the user's savedPropertyRefs array
           Firestore.updateDoc(userDoc, {
-            savedPropertyRefs: Firestore.arrayRemove(propertyDocPath),
+            savedPropertyRefs: Firestore.arrayRemove(propertyDoc),
           });
         }
       }

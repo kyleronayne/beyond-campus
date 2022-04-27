@@ -444,7 +444,7 @@ export default defineComponent({
             ownedPropertyRefs: firestore.arrayUnion(propertyDoc),
           });
         });
-      this.$router.push({ path: "/" , name: "LandingView"});
+      this.$router.push({ path: "/", name: "LandingView" });
     },
   },
 });

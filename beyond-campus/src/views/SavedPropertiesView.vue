@@ -5,7 +5,7 @@
         v-for="(propertyData, index) in propertyDocs"
         v-bind:key="index"
         v-bind:propertyID="propertyIds[index]"
-        v-bind:propertyData="propertyDocs"
+        v-bind:propertyData="propertyData"
       ></PropertyCard>
     </div>
   </div>
