@@ -35,8 +35,18 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { collection, doc, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  CollectionReference,
+  doc,
+  DocumentReference,
+  DocumentSnapshot,
+  getDoc,
+  setDoc,
+} from "firebase/firestore";
 import db from "../main";
+import database from "../main";
 export default defineComponent({
   name: "SignInView",
   data() {
@@ -65,7 +75,19 @@ export default defineComponent({
     loginWithGMail(): void {
       const provider = new GoogleAuthProvider();
       signInWithPopup(this.auth, provider).then((cred: UserCredential) => {
-        console.log("Yes, logged in");
+        const userDoc: DocumentReference = doc(
+          database,
+          `Users/${this.auth.currentUser?.uid}`
+        );
+
+        getDoc(userDoc).then((docSnapshot: DocumentSnapshot) => {
+          if (!docSnapshot.exists()) {
+            const userColl: CollectionReference = collection(database, "Users");
+            const ownedPropertyRefs: DocumentReference[] = [];
+            const savedPropertyRefs: DocumentReference[] = [];
+            setDoc(userDoc, { ownedPropertyRefs, savedPropertyRefs });
+          }
+        });
 
         // Move to the home page
         this.$router.push({ path: "/landing", name: "LandingView" });
