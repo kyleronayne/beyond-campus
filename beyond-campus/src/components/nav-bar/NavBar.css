@@ -1,95 +1,97 @@
 /* ID Selectors */
 #navbar {
-    display: flex;
-    z-index: 1;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-    background-color: var(--theme-color-main);
-    position: sticky;
-    top: 0;
-    width: 100%;
-  }
-  
-  #left-links-container {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-  }
-  
-  #title {
-    padding: 0rem 6rem 0rem 6rem;
-    text-align: center;
-    font-size: 48px;
-    font-weight: var(--theme-font-weight-bold);
-  }
-  
-  #landing-link {
-    color: white;
-    text-decoration: none;
-  }
-  
-  #right-links-container {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-  }
-  
-  #profile-link-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  #profile-main-link {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  #username {
-    padding-left: 0.5rem;
-  }
-  
-  #profile-quick-links-container {
-    display: none;
-    position: absolute;
-    margin-top: 3rem;
-    color: black;
-    background-color: white;
-    border: 2px solid var(--theme-color-main);
-    border-radius: 3px;
-  }
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  padding: 1.5rem;
+  background-color: var(--theme-color-main);
+}
 
-  #profile-link-container:hover #profile-quick-links-container{
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Class Selectors */
-  .link {
-    padding: 0.6rem;
-    text-align: center;
-    text-decoration: none;
-    color: white;
-    background-color: var(--theme-color-main-dark);
-    border-radius: 8px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    transition: 0.2s linear;
-  }
-  
-  .link.no-hover:hover {
-    transform: none;
-  }
+#navbar-container:first-of-type {
+  display: flex;
+  justify-content: flex-start;
+  gap: 2rem;
+  width: 20rem;
+  margin-right: 5rem;
+}
 
-  .link:hover {
-    transform: translateY(-5px);
-  }
-  
-  .profile-quick-link {
-    padding: 1rem 4rem 1rem 1rem;
-    cursor: pointer;
-  }
+#navbar-container:last-of-type {
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
+  width: 20rem;
+  margin-left: 5rem;
+}
 
-  .profile-quick-link:nth-of-type(odd) {
-    border-bottom: 1px solid black;
-  }
+#title {
+  font-size: 48px;
+  font-weight: var(--theme-font-weight-bold);
+}
+
+#landing-link {
+  color: white;
+  text-decoration: none;
+}
+
+#profile-link-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#profile-main-link {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+#username {
+  padding-left: 0.5rem;
+}
+
+#profile-quick-links-container {
+  display: none;
+  position: absolute;
+  margin-top: 3rem;
+  color: black;
+  background-color: white;
+  border: 2px solid var(--theme-color-main);
+  border-radius: 3px;
+}
+
+#profile-link-container:hover #profile-quick-links-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Class Selectors */
+.link {
+  padding: 0.6rem;
+  align-self: center;
+  text-decoration: none;
+  color: white;
+  background-color: var(--theme-color-main-dark);
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+  transition: 0.2s linear;
+}
+
+.link.no-hover:hover {
+  transform: none;
+}
+
+.link:hover {
+  transform: translateY(-5px);
+}
+
+.profile-quick-link {
+  padding: 1rem 4rem 1rem 1rem;
+  cursor: pointer;
+}
+
+.profile-quick-link:nth-of-type(odd) {
+  border-bottom: 1px solid black;
+}

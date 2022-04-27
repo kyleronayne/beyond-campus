@@ -228,7 +228,6 @@ export default defineComponent({
 
 <style scoped>
 #signupPanel {
-  border: 10px solid black;
 }
 #name-fields-input {
   position: absolute;
@@ -261,7 +260,7 @@ export default defineComponent({
 #information {
   position: absolute;
   left: 30vw;
-  top: 58vh;
+  top: 52.75vh;
   display: flex;
   flex-direction: row;
   width: 513px;
@@ -273,7 +272,7 @@ export default defineComponent({
 #profile {
   position: absolute;
   left: 30vw;
-  top: 68vh;
+  top: 61vh;
   display: flex;
   flex-direction: column;
   width: 513px !important;

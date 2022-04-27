@@ -96,8 +96,6 @@ export default defineComponent({
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-left: 6rem;
-  padding-right: 6rem;
 }
 
 .search-section__search-form {

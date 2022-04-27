@@ -1,20 +1,23 @@
 <template>
   <div id="navbar">
-    <div id="left-links-container">
+    <div id="navbar-container">
       <router-link
+        id="create-listing-link"
         class="link"
         v-bind:to="{ path: '/create-listing', name: 'CreateListingView' }"
         >List A Property</router-link
       >
     </div>
-    <h1 id="title">
-      <router-link
-        id="landing-link"
-        v-bind:to="{ path: '/', name: 'LandingView' }"
-        >Beyond Campus</router-link
-      >
-    </h1>
-    <div id="right-links-container">
+    <div id="navbar-container">
+      <h1 id="title">
+        <router-link
+          id="landing-link"
+          v-bind:to="{ path: '/', name: 'LandingView' }"
+          >Beyond Campus</router-link
+        >
+      </h1>
+    </div>
+    <div id="navbar-container">
       <router-link
         class="link"
         v-bind:to="{ path: '/saved-properties', name: 'SavedPropertiesView' }"
