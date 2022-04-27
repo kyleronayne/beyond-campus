@@ -1,7 +1,6 @@
 <template>
   <div id="navbar">
     <div id="left-links-container">
-      <a class="link">Rent</a>
       <router-link
         class="link"
         v-bind:to="{ path: '/create-listing', name: 'CreateListingView' }"

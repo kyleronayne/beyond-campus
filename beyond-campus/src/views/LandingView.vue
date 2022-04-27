@@ -11,12 +11,23 @@
           <div class="search-form__form-items">
             <div class="form-item">
               <label class="form-item__label" for="school">School</label>
-              <input
-                class="form-item__school-input"
+              <select
+                class="form-item__property-type-select"
                 id="school"
-                type="text"
                 v-model="school"
-              />
+              >
+                <option value="Calvin University">Calvin University</option>
+                <option value="Grand Valley State University">
+                  Grand Valley State University
+                </option>
+                <option value="Hope College">Hope College</option>
+                <option value="Michigan State University">
+                  Michigan State University
+                </option>
+                <option value="University of Michigan">
+                  University of Michigan
+                </option>
+              </select>
             </div>
             <div class="form-item">
               <label class="form-item__label" for="propertyType"

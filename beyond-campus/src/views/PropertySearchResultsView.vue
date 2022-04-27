@@ -3,10 +3,10 @@
     <FilterBar v-bind:propertyType="propertyType"></FilterBar>
     <div id="property-search-results">
       <PropertyCard
-        v-for="(propertyData, index) in propertyDocData"
+        v-for="(property, index) in properties"
         v-bind:key="index"
         v-bind:propertyID="propertyDocIDs[index]"
-        v-bind:propertyData="propertyData"
+        v-bind:property="property"
       ></PropertyCard>
     </div>
   </div>
@@ -27,13 +27,13 @@ export default defineComponent({
     const route = useRoute();
     const school: string = route.params.school.toString();
     const propertyType: string = route.params.propertyType.toString();
-    let propertyDocData: firestore.DocumentData[] = [];
+    let properties: firestore.DocumentData[] = [];
     let propertyDocIDs: string[] = [];
 
     return {
       school,
       propertyType,
-      propertyDocData,
+      properties,
       propertyDocIDs,
     };
   },
@@ -60,8 +60,8 @@ export default defineComponent({
                   // Get each property document targeted for the school
                   firestore.getDoc(propertyDoc).then((docSnapshot) => {
                     if (docSnapshot.exists()) {
-                      // Add the property data to the propertyDocData array
-                      this.propertyDocData.push(docSnapshot.data());
+                      // Add the property data to the properties array
+                      this.properties.push(docSnapshot.data());
                       // Add the property ID to the propertyDocIDs array
                       this.propertyDocIDs.push(propertyDoc.id);
                     }
@@ -79,7 +79,8 @@ export default defineComponent({
 #property-search-results {
   display: flex;
   flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 5rem;
-  padding: 4rem;
+  margin: 5rem;
 }
 </style>

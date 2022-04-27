@@ -19,31 +19,25 @@
           numBathroomsString
         }}</span>
       </div>
-      <span class="main-details__type">{{
-        propertyData.specifications.type
-      }}</span>
+      <span class="main-details__type">{{ property.specifications.type }}</span>
     </div>
     <div class="property-card__address">
       <img src="./assets/address-icon.svg" alt="" class="address__icon" />
       <div class="address__column-container">
         <div class="address__row-container">
           <span class="address__street">{{
-            propertyData.address.street + " "
+            property.address.street + " "
           }}</span>
-          <span v-if="isApt" class="address__aptUnitNum">{{
-            "Unit" + propertyData.address.aptUnitNum
+          <span class="address__aptUnitNum">{{
+            property.address.aptUnitNum
           }}</span>
         </div>
         <div class="address__row-container">
-          <span class="address__city">{{
-            propertyData.address.city + ", "
-          }}</span>
+          <span class="address__city">{{ property.address.city + ", " }}</span>
           <span class="address__state"
-            >{{ propertyData.address.state + " " }}
+            >{{ property.address.state + " " }}
           </span>
-          <span class="address__zipCode">{{
-            propertyData.address.zipCode
-          }}</span>
+          <span class="address__zipCode">{{ property.address.zipCode }}</span>
         </div>
       </div>
     </div>
@@ -60,17 +54,16 @@ import database from "@/main";
 
 export default defineComponent({
   name: "PropertyCard",
-  props: ["propertyID", "propertyData"],
+  props: ["propertyID", "property"],
   data() {
     let saveIcon = "./assets/save-icon-hollow.svg";
     let isPropertySaved = false;
-    let currentUser: Auth | null;
-    const rentString = `$${this.$props.propertyData!.expenses.rent}/month | `;
+    const rentString = `$${this.$props.property!.expenses.rent}/month | `;
     const numBedsString = `Beds: ${
-      this.$props.propertyData!.specifications.numBedrooms
+      this.$props.property!.specifications.numBedrooms
     }, `;
     const numBathroomsString = `Baths: ${
-      this.$props.propertyData!.specifications.numBathrooms
+      this.$props.property!.specifications.numBathrooms
     } `;
 
     return {
@@ -91,7 +84,7 @@ export default defineComponent({
     getPrimaryPropertyPhoto(): void {
       const primaryPhotoStorage = FirebaseStorage.ref(
         FirebaseStorage.getStorage(),
-        this.$props.propertyData!.primaryPhotoRef
+        this.$props.property!.primaryPhotoRef
       );
 
       FirebaseStorage.getDownloadURL(primaryPhotoStorage).then(
@@ -108,14 +101,15 @@ export default defineComponent({
           database,
           userDocPath
         );
-        const propertyDocPath = `Properties/${this.propertyID}`;
+        const propertyDoc: Firestore.DocumentReference = Firestore.doc(
+          database,
+          `Properties/${this.propertyID}`
+        );
 
         Firestore.getDoc(userDoc).then(
           (docSnapshot: Firestore.DocumentSnapshot) => {
             if (docSnapshot.exists()) {
-              if (
-                docSnapshot.data().savedPropertyRefs.includes(propertyDocPath)
-              ) {
+              if (docSnapshot.data().savedPropertyRefs.includes(propertyDoc)) {
                 // If the property doc ref is in the user's savedPropertyRefs array
                 this.toggleSaveIcon();
               }
@@ -166,17 +160,6 @@ export default defineComponent({
       }
     },
   },
-  computed: {
-    isApt(): boolean {
-      if (
-        this.$props.propertyData!.specifications.type != "Single Unit House"
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-  },
 });
 </script>
 
@@ -186,6 +169,7 @@ export default defineComponent({
   flex-direction: column;
   gap: 1rem;
   width: fit-content;
+  padding: 0;
   border: 4px solid black;
   border-radius: 12px;
 }

@@ -1,13 +1,14 @@
 <template>
-  <div>
-    <div id="property-saved-array">
+  <div id="saved-properties">
+    <div id="wrapper" v-if="properties.length > 0">
       <PropertyCard
-        v-for="(propertyData, index) in propertyDocs"
+        v-for="(property, index) in properties"
         v-bind:key="index"
         v-bind:propertyID="propertyIds[index]"
-        v-bind:propertyData="propertyData"
+        v-bind:property="property"
       ></PropertyCard>
     </div>
+    <span v-else>You haven't saved any properties</span>
   </div>
 </template>
 
@@ -22,40 +23,38 @@ export default defineComponent({
   name: "SavedPropertiesView",
   components: { PropertyCard },
   data() {
-    let propertyDocs: firestore.DocumentData[] = [];
+    let properties: firestore.DocumentData[] = [];
     let propertyIds: string[] = [];
     const user: User | null = getAuth().currentUser;
 
     return {
-      propertyDocs,
+      properties,
       propertyIds,
       user,
     };
   },
   mounted() {
-    this.getSavedProps();
+    this.getSavedProperties();
   },
   methods: {
-    getSavedProps() {
-      const savedPropReference: firestore.DocumentReference = firestore.doc(
+    getSavedProperties() {
+      const userDoc: firestore.DocumentReference = firestore.doc(
         database,
-        `Users/${this.user?.uid}/`
+        `Users/${this.user?.uid}`
       );
 
       firestore
-        .getDoc(savedPropReference)
-        .then((docShot: firestore.DocumentSnapshot) => {
-          if (docShot.exists()) {
-            docShot
+        .getDoc(userDoc)
+        .then((docSnapshot: firestore.DocumentSnapshot) => {
+          if (docSnapshot.exists()) {
+            docSnapshot
               .data()
               .savedPropertyRefs.forEach(
-                (propertyDocument: firestore.DocumentReference) => {
-                  firestore.getDoc(propertyDocument).then((docShot) => {
-                    if (docShot.exists()) {
-                      this.propertyDocs.push(docShot.data());
-                      console.log(this.propertyDocs);
-                      this.propertyIds.push(propertyDocument.id);
-                      console.log(this.propertyIds);
+                (propertyDoc: firestore.DocumentReference) => {
+                  firestore.getDoc(propertyDoc).then((docSnaphot) => {
+                    if (docSnaphot.exists()) {
+                      this.properties.push(docSnaphot.data());
+                      this.propertyIds.push(propertyDoc.id);
                     }
                   });
                 }
@@ -68,9 +67,14 @@ export default defineComponent({
 </script>
 
 <style>
-#property-saved-array {
+#saved-properties {
   display: flex;
+}
+#wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
   gap: 5rem;
-  padding: 4rem;
+  margin: 5rem;
 }
 </style>
