@@ -157,11 +157,6 @@ export default defineComponent({
                 `New Doc added with id ${cr.user.uid} and name ${this.firstName}`
               );
             });
-            const addingSavedProperties: CollectionReference = collection(
-              database,
-              `Users/${cr.user.uid}/savedProperties`
-            );
-            addDoc(addingSavedProperties, { reference: "" });
             this.uploadImageFile(cr.user.uid);
             this.$router.push({ path: "/" });
           })

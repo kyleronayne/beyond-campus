@@ -16,7 +16,11 @@
       >
     </h1>
     <div id="right-links-container">
-      <a class="link">Saved Properties</a>
+      <router-link
+        class="link"
+        v-bind:to="{ path: '/saved-properties', name: 'SavedPropertiesView' }"
+        >Saved Properties</router-link
+      >
       <div id="profile-link-container" v-if="isLoggedIn">
         <a id="profile-main-link" class="link no-hover">
           <img
