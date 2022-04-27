@@ -27,16 +27,20 @@
       <img src="./assets/address-icon.svg" alt="" class="address__icon" />
       <div class="address__column-container">
         <div class="address__row-container">
-          <span class="address__street">{{ propertyData.address.street }}</span>
-          <span class="address__aptUnitNum">{{
-            propertyData.address.aptUnitNum
+          <span class="address__street">{{
+            propertyData.address.street + " "
+          }}</span>
+          <span v-if="isApt" class="address__aptUnitNum">{{
+            "Unit" + propertyData.address.aptUnitNum
           }}</span>
         </div>
         <div class="address__row-container">
           <span class="address__city">{{
             propertyData.address.city + ", "
           }}</span>
-          <span class="address__state">{{ propertyData.address.state }}</span>
+          <span class="address__state"
+            >{{ propertyData.address.state + " " }}
+          </span>
           <span class="address__zipCode">{{
             propertyData.address.zipCode
           }}</span>
@@ -159,6 +163,17 @@ export default defineComponent({
             savedPropertyRefs: Firestore.arrayRemove(propertyDoc),
           });
         }
+      }
+    },
+  },
+  computed: {
+    isApt(): boolean {
+      if (
+        this.$props.propertyData!.specifications.type != "Single Unit House"
+      ) {
+        return true;
+      } else {
+        return false;
       }
     },
   },
