@@ -28,7 +28,7 @@
             src="../nav-bar/assets/profile-icon.svg"
             alt="White user profile icon"
           />
-          <span id="username"></span>
+          <span id="username">{{ userFirstName }}</span>
         </a>
         <div id="profile-quick-links-container">
           <a class="profile-quick-link" v-on:click="didClickSignOut"
@@ -50,66 +50,56 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { Auth, getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import * as Firestore from "firebase/firestore";
 import database from "@/main";
-import {
-  doc,
-  DocumentReference,
-  DocumentSnapshot,
-  getDoc,
-} from "@firebase/firestore";
 
 export default defineComponent({
   name: "NavBar",
   data() {
     let auth: Auth = getAuth();
     let isLoggedIn = false;
+    let userFirstName = "";
     let showProfileQuickLinks = false;
-    const db = database;
-    var userName = "";
 
     return {
       auth,
       isLoggedIn,
+      userFirstName,
       showProfileQuickLinks,
-      db,
-      userName,
     };
   },
   mounted() {
     onAuthStateChanged(this.auth, (user) => {
       this.isLoggedIn = user ? true : false;
-      this.getUsername();
+      this.getUserFirstName();
     });
   },
   methods: {
     /**
-     * Returns the username of the current user
+     * Gets the first name of current user
      */
-    getUsername() {
-      if (this.isLoggedIn) {
+    getUserFirstName(): void {
+      if (this.auth.currentUser) {
         if (
           this.auth.currentUser!.providerData[0].providerId === "google.com"
         ) {
-          document.getElementById("username")!.textContent = this.auth
-            .currentUser!.displayName!.split(" ")[0]
-            .toString();
+          this.userFirstName =
+            this.auth.currentUser!.displayName!.split(" ")[0];
         } else {
-          const docRef: DocumentReference = doc(
+          const userDoc: Firestore.DocumentReference = Firestore.doc(
             database,
-            `/Users/${this.auth.currentUser!.uid}/`
+            `Users/${this.auth.currentUser!.uid}`
           );
-          getDoc(docRef).then((documentSnapshot: DocumentSnapshot) => {
-            if (documentSnapshot.exists()) {
-              console.log(documentSnapshot.data().firstName.toString());
-              document.getElementById("username")!.textContent =
-                documentSnapshot.data().firstName.toString();
+
+          Firestore.getDoc(userDoc).then(
+            (docSnaphot: Firestore.DocumentSnapshot) => {
+              if (docSnaphot.exists()) {
+                this.userFirstName = docSnaphot.data().firstName;
+              }
             }
-          });
+          );
         }
       }
-      // } else {
-      //   return "str";
-      // }
     },
     /**
      * Signs the user out of their account
