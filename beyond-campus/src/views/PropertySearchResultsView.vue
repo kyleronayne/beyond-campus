@@ -78,6 +78,7 @@ export default defineComponent({
 <style scoped>
 #property-search-results {
   display: flex;
+  flex-wrap: wrap;
   gap: 5rem;
   padding: 4rem;
 }
