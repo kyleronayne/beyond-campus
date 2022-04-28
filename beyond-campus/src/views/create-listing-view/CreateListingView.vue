@@ -242,7 +242,7 @@
                 <input
                   id="phone-number"
                   class="item__input"
-                  v-mode="contactInfo.phoneNumber"
+                  v-model="contactInfo.phoneNumber"
                 />
               </div>
               <div class="section__item">
