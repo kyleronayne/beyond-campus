@@ -47,6 +47,14 @@
         </div>
       </div>
     </div>
+    <div class="property-card__contact-info">
+      <span class="contact-info__name">{{
+        property.data().contactInfo.name + ":"
+      }}</span>
+      <span class="contact-info__phoneNumber">{{
+        property.data().contactInfo.phoneNumber
+      }}</span>
+    </div>
     <div class="property-card__bottom-accent"></div>
   </div>
 </template>
@@ -186,6 +194,7 @@ export default defineComponent({
   padding: 0;
   border: 4px solid black;
   border-radius: 12px;
+  margin-bottom: 5rem;
 }
 
 .property-card__primary-photo-container {
@@ -256,6 +265,13 @@ export default defineComponent({
 .address__column-container {
   display: flex;
   flex-direction: column;
+}
+
+.property-card__contact-info {
+  align-self: center;
+  display: flex;
+  align-content: center;
+  gap: 0.5rem;
 }
 
 .property-card__bottom-accent {

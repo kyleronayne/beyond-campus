@@ -24,9 +24,10 @@ const routes: Array<RouteRecordRaw> = [
     component: SignUpView,
   },
   {
-    path: "/property-search-results",
+    path: "/property-search-results/:school/:propertyType",
     name: "PropertySearchResultsView",
     component: PropertySearchResultsView,
+    props: true,
   },
   {
     path: "/saved-properties",

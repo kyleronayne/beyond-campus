@@ -23,13 +23,19 @@ type Expenses = {
   cleaningFee: string;
 };
 
+type ContactInfo = {
+  phoneNumber: string;
+  name: string;
+};
+
 type Property = {
   primaryPhotoRef: string;
   address: Address;
   specifications: Specifications;
   expenses: Expenses;
   includedUtilitiesAndServices: string[];
+  contactInfo: ContactInfo;
   description: string;
 };
 
-export { Address, Specifications, Expenses, Property };
+export { Address, Specifications, Expenses, ContactInfo, Property };

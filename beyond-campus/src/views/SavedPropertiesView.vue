@@ -1,14 +1,14 @@
 <template>
   <div id="saved-properties">
-    <div id="wrapper" v-if="properties.length > 0">
-      <PropertyCard
-        v-on:didUnSaveProperty="didUnSaveProperty"
-        v-for="property in properties"
-        v-bind:key="property.id"
-        v-bind:property="property"
-      ></PropertyCard>
-    </div>
-    <span v-else>You haven't saved any properties</span>
+    <PropertyCard
+      v-on:didUnSaveProperty="didUnSaveProperty"
+      v-for="property in properties"
+      v-bind:key="property.id"
+      v-bind:property="property"
+    ></PropertyCard>
+    <span v-if="properties.length === 0"
+      >You haven't saved any properties yet</span
+    >
   </div>
 </template>
 
@@ -64,7 +64,6 @@ export default defineComponent({
         });
     },
     didUnSaveProperty(unSavedProperty: firestore.DocumentSnapshot) {
-      console.log(typeof unSavedProperty);
       this.properties = this.properties.filter(
         (savedProperty: firestore.DocumentSnapshot) => {
           return savedProperty.id != unSavedProperty.id;
@@ -78,12 +77,9 @@ export default defineComponent({
 <style>
 #saved-properties {
   display: flex;
-}
-#wrapper {
-  display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 5rem;
+  justify-content: space-between;
+  width: 90%;
   margin: 5rem;
 }
 </style>

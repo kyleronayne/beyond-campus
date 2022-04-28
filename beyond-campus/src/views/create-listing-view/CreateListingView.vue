@@ -49,7 +49,7 @@
                   class="item__input"
                   id="street"
                   type="text"
-                  v-model="address.street"
+                  v-model.lazy="address.street"
                 />
               </div>
               <div class="section__item">
@@ -63,7 +63,11 @@
               </div>
               <div class="section__item">
                 <label class="item__label" for="state">State</label>
-                <select class="item__select" id="state" v-model="address.state">
+                <select
+                  class="item__select"
+                  id="state"
+                  v-model.lazy="address.state"
+                >
                   <option v-for="(state, index) in states" v-bind:key="index">
                     {{ state }}
                   </option>
@@ -75,7 +79,7 @@
                   class="item__input"
                   id="zip-code"
                   type="text"
-                  v-model="address.zipCode"
+                  v-model.lazy="address.zipCode"
                 />
               </div>
             </div>
@@ -85,7 +89,7 @@
                 class="item__input"
                 id="apt-unit-num"
                 type="text"
-                v-model="address.aptUnitNum"
+                v-model.lazy="address.aptUnitNum"
               />
             </div>
             <div class="section__item">
@@ -228,6 +232,29 @@
               ></MultiSelectOptions>
             </div>
           </section>
+          <section class="section">
+            <h2 class="section__heading">Contact Info</h2>
+            <div class="section__multi-item-container">
+              <div class="section__item">
+                <label class="item__label" for="phone-number"
+                  >Phone Number</label
+                >
+                <input
+                  id="phone-number"
+                  class="item__input"
+                  v-mode="contactInfo.phoneNumber"
+                />
+              </div>
+              <div class="section__item">
+                <label class="item__label" for="name">Name</label>
+                <input
+                  id="name"
+                  class="item__input"
+                  v-model="contactInfo.name"
+                />
+              </div>
+            </div>
+          </section>
           <!-- Description Section -->
           <section class="section">
             <h2 class="section__heading">Description</h2>
@@ -260,6 +287,7 @@ import {
   Address,
   Specifications,
   Expenses,
+  ContactInfo,
   Property,
 } from "./assets/DataTypes";
 import { States, PropertyTypes, UtilityAndServiceOptions } from "./assets/Data";
@@ -298,6 +326,10 @@ export default defineComponent({
       securityDeposit: "",
       cleaningFee: "",
     };
+    let contactInfo: ContactInfo = {
+      phoneNumber: "",
+      name: "",
+    };
 
     return {
       currentUser,
@@ -310,6 +342,7 @@ export default defineComponent({
       targetedSchools,
       specifications,
       expenses,
+      contactInfo,
       utilityAndServiceOptions: UtilityAndServiceOptions,
       description: "",
     };
@@ -320,7 +353,12 @@ export default defineComponent({
        * Sets the targetedSchools array based on the user-provided location
        */
       handler() {
-        if (this.address.city && this.address.state) {
+        if (
+          this.address.street &&
+          this.address.city &&
+          this.address.state &&
+          this.address.zipCode
+        ) {
           // If the user has entered a state and city
           this.targetedSchools = [];
           const state: string = this.address.state.toString();
@@ -411,6 +449,7 @@ export default defineComponent({
         specifications: this.specifications,
         expenses: this.expenses,
         includedUtilitiesAndServices: this.getIncludedUS(),
+        contactInfo: this.contactInfo,
         description: this.description,
       };
 

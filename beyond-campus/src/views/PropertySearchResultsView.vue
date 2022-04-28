@@ -1,13 +1,10 @@
 <template>
-  <div id="property-search-results-view">
-    <FilterBar v-bind:propertyType="propertyType"></FilterBar>
-    <div id="property-search-results">
-      <PropertyCard
-        v-for="(property, index) in properties"
-        v-bind:key="index"
-        v-bind:property="property"
-      ></PropertyCard>
-    </div>
+  <div id="property-search-results">
+    <PropertyCard
+      v-for="(property, index) in properties"
+      v-bind:key="index"
+      v-bind:property="property"
+    ></PropertyCard>
   </div>
 </template>
 
@@ -21,7 +18,7 @@ import * as firestore from "firebase/firestore";
 
 export default defineComponent({
   name: "PropertySearchResultsView",
-  components: { FilterBar, PropertyCard },
+  components: { PropertyCard },
   data() {
     const route = useRoute();
     const school: string = route.params.school.toString();
@@ -59,12 +56,32 @@ export default defineComponent({
                     if (docSnapshot.exists()) {
                       // Add the property data to the properties array
                       this.properties.push(docSnapshot);
+                      this.filterByPropertyType();
                     }
                   });
                 }
               );
           }
         });
+    },
+    filterByPropertyType() {
+      this.properties = this.properties.filter(
+        (property: firestore.DocumentSnapshot) => {
+          if (property.exists()) {
+            let propertyType = property.data().specifications.type;
+            if (
+              propertyType === "Single Unit House" ||
+              propertyType === "Duplex"
+            ) {
+              propertyType = "House";
+            }
+
+            if (this.propertyType.includes(propertyType)) {
+              return property;
+            }
+          }
+        }
+      );
     },
   },
 });
@@ -74,8 +91,8 @@ export default defineComponent({
 #property-search-results {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 5rem;
+  justify-content: space-between;
+  width: 90%;
   margin: 5rem;
 }
 </style>
