@@ -5,7 +5,6 @@
       <PropertyCard
         v-for="(property, index) in properties"
         v-bind:key="index"
-        v-bind:propertyID="propertyDocIDs[index]"
         v-bind:property="property"
       ></PropertyCard>
     </div>
@@ -27,14 +26,12 @@ export default defineComponent({
     const route = useRoute();
     const school: string = route.params.school.toString();
     const propertyType: string = route.params.propertyType.toString();
-    let properties: firestore.DocumentData[] = [];
-    let propertyDocIDs: string[] = [];
+    let properties: firestore.DocumentSnapshot[] = [];
 
     return {
       school,
       propertyType,
       properties,
-      propertyDocIDs,
     };
   },
   mounted() {
@@ -61,9 +58,7 @@ export default defineComponent({
                   firestore.getDoc(propertyDoc).then((docSnapshot) => {
                     if (docSnapshot.exists()) {
                       // Add the property data to the properties array
-                      this.properties.push(docSnapshot.data());
-                      // Add the property ID to the propertyDocIDs array
-                      this.propertyDocIDs.push(propertyDoc.id);
+                      this.properties.push(docSnapshot);
                     }
                   });
                 }

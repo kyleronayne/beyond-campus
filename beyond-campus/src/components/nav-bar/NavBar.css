@@ -92,6 +92,10 @@
   cursor: pointer;
 }
 
+.profile-quick-link:hover {
+  background-color: var(--theme-color-main-light);
+}
+
 .profile-quick-link:nth-of-type(odd) {
   border-bottom: 1px solid black;
 }

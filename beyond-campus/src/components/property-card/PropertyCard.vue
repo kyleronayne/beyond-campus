@@ -19,25 +19,31 @@
           numBathroomsString
         }}</span>
       </div>
-      <span class="main-details__type">{{ property.specifications.type }}</span>
+      <span class="main-details__type">{{
+        property.data().specifications.type
+      }}</span>
     </div>
     <div class="property-card__address">
       <img src="./assets/address-icon.svg" alt="" class="address__icon" />
       <div class="address__column-container">
         <div class="address__row-container">
           <span class="address__street">{{
-            property.address.street + " "
+            property.data().address.street + " "
           }}</span>
           <span class="address__aptUnitNum">{{
-            property.address.aptUnitNum
+            property.data().address.aptUnitNum
           }}</span>
         </div>
         <div class="address__row-container">
-          <span class="address__city">{{ property.address.city + ", " }}</span>
+          <span class="address__city">{{
+            property.data().address.city + ", "
+          }}</span>
           <span class="address__state"
-            >{{ property.address.state + " " }}
+            >{{ property.data().address.state + " " }}
           </span>
-          <span class="address__zipCode">{{ property.address.zipCode }}</span>
+          <span class="address__zipCode">{{
+            property.data().address.zipCode
+          }}</span>
         </div>
       </div>
     </div>
@@ -54,16 +60,18 @@ import database from "@/main";
 
 export default defineComponent({
   name: "PropertyCard",
-  props: ["propertyID", "property"],
+  props: ["property"],
   data() {
     let saveIcon = "./assets/save-icon-hollow.svg";
     let isPropertySaved = false;
-    const rentString = `$${this.$props.property!.expenses.rent}/month | `;
+    const rentString = `$${
+      this.$props.property!.data().expenses.rent
+    }/month | `;
     const numBedsString = `Beds: ${
-      this.$props.property!.specifications.numBedrooms
+      this.$props.property!.data().specifications.numBedrooms
     }, `;
     const numBathroomsString = `Baths: ${
-      this.$props.property!.specifications.numBathrooms
+      this.$props.property!.data().specifications.numBathrooms
     } `;
 
     return {
@@ -84,7 +92,7 @@ export default defineComponent({
     getPrimaryPropertyPhoto(): void {
       const primaryPhotoStorage = FirebaseStorage.ref(
         FirebaseStorage.getStorage(),
-        this.$props.property!.primaryPhotoRef
+        this.$props.property!.data().primaryPhotoRef
       );
 
       FirebaseStorage.getDownloadURL(primaryPhotoStorage).then(
@@ -103,16 +111,21 @@ export default defineComponent({
         );
         const propertyDoc: Firestore.DocumentReference = Firestore.doc(
           database,
-          `Properties/${this.propertyID}`
+          `Properties/${this.property.id}`
         );
 
         Firestore.getDoc(userDoc).then(
           (docSnapshot: Firestore.DocumentSnapshot) => {
             if (docSnapshot.exists()) {
-              if (docSnapshot.data().savedPropertyRefs.includes(propertyDoc)) {
-                // If the property doc ref is in the user's savedPropertyRefs array
-                this.toggleSaveIcon();
-              }
+              docSnapshot
+                .data()
+                .savedPropertyRefs.forEach(
+                  (savedPropertyDoc: Firestore.DocumentReference) => {
+                    if (savedPropertyDoc.id === propertyDoc.id) {
+                      this.toggleSaveIcon();
+                    }
+                  }
+                );
             }
           }
         );
@@ -140,7 +153,7 @@ export default defineComponent({
           database,
           userDocPath
         );
-        const propertyDocPath = `Properties/${this.propertyID}`;
+        const propertyDocPath = `Properties/${this.property.id}`;
         const propertyDoc: Firestore.DocumentReference = Firestore.doc(
           database,
           propertyDocPath
@@ -156,6 +169,7 @@ export default defineComponent({
           Firestore.updateDoc(userDoc, {
             savedPropertyRefs: Firestore.arrayRemove(propertyDoc),
           });
+          this.$emit("didUnSaveProperty", this.$props.property);
         }
       }
     },
